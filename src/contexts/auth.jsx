@@ -1,5 +1,5 @@
-import { createContext, useContext, useEffect, useState } from "react"
-import { supabase } from "../services/supabase"
+import { createContext, useContext, useEffect, useState } from "react";
+import { supabase } from "../services/supabase";
 
 const AuthContext = createContext()
 
@@ -7,14 +7,12 @@ export function useAuth() {
   return useContext(AuthContext)
 }
 
-
 export function AuthProvider({ children }) {
   const [session, setSession] = useState()
   const [user, setUser] = useState(null)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    console.log("teste")
     let gotSession = localStorage.getItem("authSession")
     if (gotSession) {
       console.log("Retrieved: ", gotSession)

@@ -7,6 +7,7 @@ import Signup from "./pages/signup";
 import { AuthProvider } from "./contexts/auth";
 import Payments from "./pages/payments";
 import Business from "./pages/business";
+import Salesman from "./pages/salesman";
 
 const App = () => {
   const router = createBrowserRouter([
@@ -28,8 +29,8 @@ const App = () => {
           element: <Business />,
         }, 
         {
-          path: "signup",
-          element: <Signup />,
+          path: "salesman",
+          element: <Salesman />,
         },
         {
           path: "logout",

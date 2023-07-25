@@ -21,7 +21,8 @@ const Main = () => {
         <Sidebar>
           <Menu>
             <SubMenu label="Cadastros">
-              <MenuItem component={<Link to="/business" />}> Organizações </MenuItem>
+              <MenuItem component={<Link to="/business" />}> Empresas </MenuItem>
+              <MenuItem component={<Link to="/salesman" />}> Parceiros </MenuItem>
               <MenuItem component={<Link to="/signup" />}> Usuários </MenuItem>
             </SubMenu>
             <MenuItem component={<Link to="/dashboard" />}>

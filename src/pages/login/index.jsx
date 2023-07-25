@@ -1,21 +1,18 @@
 import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../contexts/auth";
-import Loader from "../../utils/loader";
 import Input from "../../components/input";
 
 const Login = () => {
   const emailRef = useRef(null);
   const passwordRef = useRef(null);
   const [errorMsg, setErrorMsg] = useState("");
-  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { logIn } = useAuth();
 
   async function handleLogIn(e) {
     e.preventDefault();
     setErrorMsg("");
-    setLoading(true);
 
     if (!passwordRef.current?.value || !emailRef.current?.value) {
       console.log(emailRef.current?.value, passwordRef.current?.value);
@@ -30,17 +27,13 @@ const Login = () => {
 
     if (error) {
       setErrorMsg("Credenciais de login inválidas");
-      setLoading(false)
     } else {
       navigate("/dashboard");
-      setLoading(false)
     }
   }
 
-  
   return (
     <div className=" w-screen h-screen flex justify-center items-center">
-      <Loader disabled={loading} />
       <form
         className="flex flex-col items-cente px-10 py-10 gap-3 border border-[#e5e7eb] rounded-lg"
         onSubmit={handleLogIn}
