@@ -6,6 +6,7 @@ import Error from "./pages/error";
 import Signup from "./pages/signup";
 import { AuthProvider } from "./contexts/auth";
 import Payments from "./pages/payments";
+import Business from "./pages/business";
 
 const App = () => {
   const router = createBrowserRouter([
@@ -21,6 +22,10 @@ const App = () => {
          {
           path: "login",
           element: <Login />,
+        }, 
+         {
+          path: "business",
+          element: <Business />,
         }, 
         {
           path: "signup",
