@@ -94,6 +94,7 @@ const UpdateBusinessForm = ({toggle, id, onUpdateSuccess}) => {
         <Input
         label='Cnpj'
         id='cnpj'
+        model='cnpj'
         onChange={(e) => setCnpj(e.target.value)}
         value={cnpj}
         />

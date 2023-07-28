@@ -4,8 +4,19 @@ import { useAuth } from "../contexts/auth";
 
 import { Sidebar, Menu, MenuItem, SubMenu } from "react-pro-sidebar";
 import Loader from "../utils/loader";
+import {
+  Buildings,
+  CaretLeft,
+  CaretRight,
+  Gauge,
+  UserCirclePlus,
+  UserList,
+  Wallet,
+} from "@phosphor-icons/react";
 
 const Main = () => {
+  const [collapsed, setCollapsed] = useState(false);
+
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
 
@@ -18,29 +29,51 @@ const Main = () => {
   return (
     <div className="flex h-screen">
       {user && (
-        <Sidebar>
+        <Sidebar
+          backgroundColor="white"
+          breakPoint="sm"
+          style={{ height: "100vh" }}
+          collapsed={collapsed}
+        >
+          <div className="w-full p-2" onClick={() => setCollapsed(!collapsed)}>
+            {!collapsed ? <CaretLeft size={24} /> : <CaretRight size={24} />}
+          </div>
           <Menu>
-            <SubMenu label="Cadastros">
-              <MenuItem component={<Link to="/business" />}> Empresas </MenuItem>
-              <MenuItem component={<Link to="/salesman" />}> Parceiros </MenuItem>
+            <SubMenu icon={<UserList size={32} />} label="Cadastros">
+              <MenuItem
+                icon={<Buildings size={32} />}
+                component={<Link to="/business" />}
+              >
+                Empresas
+              </MenuItem>
+              <MenuItem
+                icon={<UserCirclePlus size={32} />}
+                component={<Link to="/salesman" />}
+              >
+                Parceiros
+              </MenuItem>
               <MenuItem component={<Link to="/signup" />}> Usuários </MenuItem>
             </SubMenu>
-            <MenuItem component={<Link to="/dashboard" />}>
-              {" "}
-              DashBoard{" "}
+            <MenuItem
+              icon={<Gauge size={32} />}
+              component={<Link to="/dashboard" />}
+            >
+              Painel
             </MenuItem>
-            <MenuItem component={<Link to="/payments" />}>
-              {" "}
-              Pagamentos{" "}
+            <MenuItem
+              icon={<Wallet size={32} />}
+              component={<Link to="/payments" />}
+            >
+              Pagamentos
             </MenuItem>
           </Menu>
         </Sidebar>
       )}
       <div className="flex flex-col w-full">
         {user && (
-          <nav className="bg-white w-full h-12 flex justify-between items-center border-b-[1px] px-3">
+          <nav className="bg-white w-full h-[65px] flex justify-between items-center border-b-[1px] px-3">
             <span className="font-medium text-lg">
-       {/*    {user.user_metadata.first_name} */}
+              {/*    {user.user_metadata.first_name} */}
             </span>
             <div className="">
               <button
@@ -49,7 +82,7 @@ const Main = () => {
                 }}
                 className="bg-white"
               >
-                Logout
+                Sair
               </button>
             </div>
           </nav>

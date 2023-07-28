@@ -6,7 +6,7 @@ import { supabase } from "../../../../services/supabase";
 const UpdateSalesmanForm = ({ toggle, id, onUpdateSuccess }) => {
   const [name, setName] = useState("");
 
-  const [formError, setFormError] = useState("");
+  const [formError, setFormError] = useState('');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -78,7 +78,6 @@ const UpdateSalesmanForm = ({ toggle, id, onUpdateSuccess }) => {
       <form
         className="flex w-full flex-col gap-3"
         onSubmit={handleSubmit}
-        action=""
       >
         <Input
           label="Nome"
@@ -90,7 +89,7 @@ const UpdateSalesmanForm = ({ toggle, id, onUpdateSuccess }) => {
         <div className="flex gap-2 justify-end">
           <button
             onClick={() => handleDelete(id)}
-            className=" px-2 py-1  rounded text-red-600"
+            className=" px-2 py-1 rounded text-red-600"
             type="button"
           >
             Apagar
