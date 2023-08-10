@@ -1,11 +1,11 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
 import Input from "../../../../components/input";
-import { supabase } from "../../../../services/supabase";
+//import { supabase } from "../../../../services/supabase";
 import InputMask from "react-input-mask";
 import Button from "../../../../components/button";
 
-const BusinessForm = ({ toggle, onCreateSuccess }) => {
+const BusinessForm = ({ toggle, updateBusinessData }) => {
   const [name, setName] = useState("");
   const [cnpj, setCnpj] = useState("");
   const [feeAmount, setFeeAmount] = useState("");
@@ -18,25 +18,12 @@ const BusinessForm = ({ toggle, onCreateSuccess }) => {
       setFormError("Preencha todos os campos corretamente.");
       return;
     }
-
-    const { data, error } = await supabase
-      .from("business")
-      .insert([{ name, cnpj, fee_amount: feeAmount }])
-      .select();
-
-    if (error) {
+    try {
+     await updateBusinessData({ name, cnpj, fee_amount: feeAmount }, "create");
+     toggle();
+    } catch (error) {
       console.log("Create Error:", error);
       setFormError("Preencha todos os campos corretamente.", error.message);
-    }
-
-    if (data) {
-      console.log("Create, Data:", data);
-      setName("");
-      setCnpj("");
-      setFeeAmount("");
-      setFormError("");
-      onCreateSuccess();
-      toggle();
     }
   };
 
@@ -55,7 +42,6 @@ const BusinessForm = ({ toggle, onCreateSuccess }) => {
           value={name}
         />
 
-
         <Input
           label="Cnpj"
           id="cnpj"
@@ -71,11 +57,12 @@ const BusinessForm = ({ toggle, onCreateSuccess }) => {
           value={feeAmount}
         />
 
-
         <div className="flex gap-2 justify-end">
-          <Button className="bg-emerald-500 px-3 py-2 rounded" type="submit">
-            Criar
-          </Button>
+          <Button
+            className="bg-emerald-500 px-3 py-2 rounded"
+            type="submit"
+            label="Criar"
+          />
         </div>
         {formError && <p className="text-sm text-red-400">{formError}</p>}
       </form>

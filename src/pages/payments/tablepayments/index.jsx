@@ -1,6 +1,6 @@
 import { DotsThreeVertical } from "@phosphor-icons/react";
 import React, { useState } from "react";
-import TableItem from "./tableitem";
+import CardPayment  from "./cardpayment";
 
 const TablePayments = ({ data }) => {
 
@@ -52,7 +52,7 @@ const pagamentosAgrupadosPorData = groupPagamentosByData(data);
         <tbody className="">
          {pagamentosAgrupadosPorData &&
             pagamentosAgrupadosPorData.map((item, index) => {
-              return <TableItem  key={index} item={item} />;
+              return <CardPayment  key={index} item={item} />;
             })} 
         </tbody>
       </table>

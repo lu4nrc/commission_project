@@ -4,7 +4,7 @@ import { supabase } from "../../../../services/supabase";
 import Select from "../../../../components/select";
 import { useEffect } from "react";
 
-const RecurrenceForm = ({toggle, onCreateSuccess}) => {
+const FormPayments  = ({toggle, onCreateSuccess}) => {
          //installments = Parcela
   const [installments, setInstallments] = useState(1);
   const [dueDate, setDueDate] = useState(null);
@@ -127,4 +127,4 @@ console.log(selectedSalesman)
   )
 }
 
-export default RecurrenceForm
+export default FormPayments 

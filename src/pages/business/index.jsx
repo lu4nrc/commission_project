@@ -1,6 +1,11 @@
 import { useEffect } from "react";
 import { useState } from "react";
-import { supabase } from "../../services/supabase";
+import {
+  dbaAddBusiness,
+  dbDeleteBusiness,
+  dbUpdateBusiness,
+  supabase,
+} from "../../services/supabase";
 import useModal from "../../hooks/useModal";
 import CreateBusiness from "./createbusiness";
 import UpdateBusiness from "./updatebusiness";
@@ -10,8 +15,53 @@ const Business = () => {
   const { isOpen, toggle } = useModal();
   const [Loading, setLoading] = useState(false);
 
-  const [business, setBusiness] = useState([]);
+  const [businessData, setBusinessData] = useState([]);
   const [fetchError, setFetchError] = useState("");
+
+  const updateBusinessData = async (business, type) => {
+    let newBusinessData;
+    setLoading(true);
+    switch (type) {
+      case "create":
+        try {
+          await dbaAddBusiness(business);
+          newBusinessData = [...businessData, business];
+          setBusinessData(newBusinessData);
+        } catch (error) {
+          console.log(error);
+        }
+        break;
+      case "update":
+        try {
+          await dbUpdateBusiness(business);
+          newBusinessData = businessData.map((oldBusiness) =>
+            oldBusiness.id === business.id ? business : oldBusiness
+          );
+          setBusinessData(newBusinessData);
+        } catch (error) {
+          business;
+        }
+
+        break;
+      case "delete":
+        try {
+          await dbDeleteBusiness(business);
+          newBusinessData = businessData.filter(
+            (empresa) => empresa.id !== business.id
+          );
+          setBusinessData(newBusinessData);
+          console.log("Remove OK");
+        } catch (error) {
+          console.log("error");
+        }
+
+        break;
+
+      default:
+        break;
+    }
+    setLoading(false);
+  };
 
   useEffect(() => {
     fetchBusinessData();
@@ -22,24 +72,24 @@ const Business = () => {
     let { data, error } = await supabase.from("business").select("*");
 
     if (error) {
-      setFetchError("Não foi possível buscar buscar");
-      setBusiness([]);
+      setFetchError("Não foi possível buscar");
+      setBusinessData([]);
       console.log(error);
     } else {
-      setBusiness(data || []);
+      setBusinessData(data || []);
       setFetchError("");
     }
     setLoading(false);
   };
 
-  const reloadBusiness = () => {
-    fetchBusinessData();
-  };
-
   return (
     <div className="flex p-2 flex-col">
       <Loader disabled={Loading} />
-      <CreateBusiness onCreateSuccess={reloadBusiness} />
+      <CreateBusiness
+        setBusinessData={setBusinessData}
+        businessData={businessData}
+        updateBusinessData={updateBusinessData}
+      />
       <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-50">
@@ -56,16 +106,16 @@ const Business = () => {
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
-            {business &&
-              business.map((item) => {
+            {businessData &&
+              businessData.map((business) => {
                 return (
-                  <tr key={item.id}>
-                    <td className="px-6 py-4">{item.name}</td>
-                    <td className="px-6 py-4">{item.cnpj}</td>
+                  <tr key={business.id}>
+                    <td className="px-6 py-4">{business.name}</td>
+                    <td className="px-6 py-4">{business.cnpj}</td>
                     <td className="px-6 py-4">
                       <UpdateBusiness
-                        id={item.id}
-                        onUpdateSuccess={reloadBusiness}
+                        business={business}
+                        updateBusinessData={updateBusinessData}
                       />
                     </td>
                   </tr>

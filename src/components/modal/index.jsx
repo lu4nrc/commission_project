@@ -11,13 +11,10 @@ const Modal = (props) => {
           <div className="flex w-full justify-center items-center h-full">
             <div
               onClick={(e) => e.stopPropagation()}
-              className="w-96 bg-white p-2 rounded-lg overflow-hidden"
+              className="w-[512px] bg-white p-5 rounded-lg overflow-hidden"
             >
               <div className="relative">
-                <button
-                  className="absolute right-0"
-                  onClick={props.toggle}
-                >
+                <button className="absolute right-0" onClick={props.toggle}>
                   x
                 </button>
                 {props.children}

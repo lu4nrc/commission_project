@@ -36,7 +36,7 @@ const SalesmanForm = ({ toggle, onCreateSuccess }) => {
 
   return (
     <div>
-      <h1 className="text-3xl font-semibold mb-4">Cadastro</h1>
+      <h1 className="text-3xl mb-4">Cadastro</h1>
       <form
         className="flex w-full flex-col gap-3"
         onSubmit={handleSubmit}

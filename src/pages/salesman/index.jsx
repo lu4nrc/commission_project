@@ -42,26 +42,27 @@ const Salesman = () => {
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-50">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs text-gray-500 uppercase tracking-wider">
                 Nome
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-right text-xs  text-gray-500 uppercase tracking-wider">
                 Editar
               </th>
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
+
             {salesman &&
               salesman.map((item) => {
                 return (
                   <tr key={item.id}>
-                    <td className="px-6 py-4">{item.name}</td>
-                    <td className="px-6 py-4">
+                    <th className="px-6 py-4">{item.name}</th>
+                    <th className="px-6 py-4 text-right">
                       <UpdateSalesman
                         id={item.id}
                         onUpdateSuccess={reloadSalesman}
                       />
-                    </td>
+                    </th>
                   </tr>
                 );
               })}

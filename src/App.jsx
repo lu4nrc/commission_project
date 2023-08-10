@@ -1,18 +1,18 @@
-import { RouterProvider, createBrowserRouter } from "react-router-dom";
-import Login from "./pages/login";
-import Dashboard from "./pages/dashboard";
-import Main from "./layouts/Main";
-import Error from "./pages/error";
-import Signup from "./pages/signup";
-import { AuthProvider } from "./contexts/auth";
-import Payments from "./pages/payments";
-import Business from "./pages/business";
-import Salesman from "./pages/salesman";
+import { RouterProvider, createBrowserRouter } from 'react-router-dom';
+import { AuthProvider } from './contexts/auth';
+import Main from './layouts/Main';
+import Kanban from './pages/Kanban';
+import Business from './pages/business';
+import Dashboard from './pages/dashboard';
+import Error from './pages/error';
+import Login from './pages/login';
+import Payments from './pages/payments';
+import Salesman from './pages/salesman';
 
-const App = () => {
+function App() {
   const router = createBrowserRouter([
     {
-      path: "/",
+      path: '/',
       element: <Main />,
       errorElement: <Error />,
       children: [
@@ -20,32 +20,36 @@ const App = () => {
           index: true,
           element: <Dashboard />,
         },
-         {
-          path: "login",
-          element: <Login />,
-        }, 
-         {
-          path: "business",
-          element: <Business />,
-        }, 
         {
-          path: "salesman",
+          path: 'login',
+          element: <Login />,
+        },
+        {
+          path: 'business',
+          element: <Business />,
+        },
+        {
+          path: 'salesman',
           element: <Salesman />,
         },
         {
-          path: "logout",
+          path: 'logout',
         },
         {
-          path: "dashboard",
+          path: 'dashboard',
           element: <Dashboard />,
         },
         {
-          path: "payments",
+          path: 'payments',
           element: <Payments />,
+        },
+        {
+          path: 'kanban',
+          element: <Kanban />,
         },
       ],
     },
-  ])
+  ]);
   return (
     <div>
       <AuthProvider>
@@ -53,6 +57,6 @@ const App = () => {
       </AuthProvider>
     </div>
   );
-};
+}
 
 export default App;
