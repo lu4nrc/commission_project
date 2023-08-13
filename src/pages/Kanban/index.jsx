@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { DragDropContext } from 'react-beautiful-dnd';
 import { v4 as uuidv4 } from 'uuid';
-import { supabase } from '../../services/supabase';
-
+import { dbUpdateColumn, dbaAddColumn, supabase } from '../../services/supabase';
+import Loader from '../../utils/loader';
 import Column from './Column';
+import CreateColumn from './CreateColumn';
 
 const itemsFromBackend = [
   { id: uuidv4(), content: 'First task' },
@@ -45,7 +46,7 @@ const columnsFromBackend = {
   },
 };
 
-const onDragEnd = (result, columns, setColumns) => {
+async function onDragEnd(result, columns, setColumns) {
   if (!result.destination) return;
   const { source, destination } = result;
 
@@ -67,6 +68,8 @@ const onDragEnd = (result, columns, setColumns) => {
         items: destItems,
       },
     });
+    await dbUpdateColumn(sourceColumn.id, sourceItems);
+    await dbUpdateColumn(destColumn.id, destItems);
   } else {
     const column = columns[source.droppableId];
     const copiedItems = [...column.items];
@@ -79,13 +82,72 @@ const onDragEnd = (result, columns, setColumns) => {
         items: copiedItems,
       },
     });
+    await dbUpdateColumn(column.id, copiedItems);
   }
-};
+}
 
 function Kanban() {
-  const [columns, setColumns] = useState(columnsFromBackend);
+  const [columnData, setColumnData] = useState({});
+  const [fetchError, setFetchError] = useState();
+  const [Loading, setLoading] = useState(false);
 
-  // Função para inserir um novo item em uma coluna específica
+  const fetchColumnData = async () => {
+    setLoading(true);
+    const { data, error } = await supabase.from('columns').select('*');
+
+    if (error) {
+      setFetchError('Não foi possível buscar');
+      setColumnData([]);
+    } else {
+      const sortedColumnData = [...data].sort(
+        (a, b) => new Date(a.created_at) - new Date(b.created_at)
+      );
+      setColumnData(sortedColumnData || []);
+      setFetchError('');
+    }
+    setLoading(false);
+  };
+
+  const updateColumnData = async (column, type) => {
+    setLoading(true);
+    let newColumnData;
+    switch (type) {
+      case 'create':
+        try {
+          await dbaAddColumn(column);
+          newColumnData = [...columnData, column];
+          setColumnData(newColumnData);
+        } catch (error) {
+          setFetchError(error);
+        }
+        break;
+      case 'update':
+        try {
+          await dbUpdateColumn(column);
+        } catch (error) {
+          business;
+        }
+
+        break;
+      case 'delete':
+        try {
+          await dbDeleteBusiness(business);
+          newBusinessData = businessData.filter((empresa) => empresa.id !== business.id);
+          setBusinessData(newBusinessData);
+          console.log('Remove OK');
+        } catch (error) {
+          console.log('error');
+        }
+
+        break;
+
+      default:
+        break;
+    }
+    setLoading(false);
+  };
+
+  /*  // Função para inserir um novo item em uma coluna específica
   async function insertItemIntoColumn(columnName, content) {
     try {
       // Obter os dados atuais da coluna
@@ -116,19 +178,25 @@ function Kanban() {
     } catch (error) {
       console.error('Erro ao inserir item na coluna:', error.message);
     }
-  }
+  } */
 
   useEffect(() => {
-    console.table(columns);
-  }, [columns]);
+    fetchColumnData();
+  }, []);
 
   return (
-    <div className="flex h-full ">
-      <DragDropContext onDragEnd={(result) => onDragEnd(result, columns, setColumns)}>
-        {Object.entries(columns).map(([columnId, column], index) => (
-          <Column columnId={columnId} column={column} key={index} />
-        ))}
-      </DragDropContext>
+    <div className="w-full">
+      <div className="flex w-[calc(100vw-200px)] overflow-x-auto">
+        <Loader disabled={Loading} />
+        <DragDropContext onDragEnd={(result) => onDragEnd(result, columnData, setColumnData)}>
+          {Object.entries(columnData).map(([columnId, column], index) => (
+            <Column columnId={columnId} column={column} key={index} />
+          ))}
+          <div className="m-2">
+            <CreateColumn updateColumnData={updateColumnData} />
+          </div>
+        </DragDropContext>
+      </div>
     </div>
   );
 }

@@ -2,16 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link, Outlet, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/auth';
 
-import {
-  Buildings,
-  CaretLeft,
-  CaretRight,
-  Gauge,
-  Kanban,
-  UserCirclePlus,
-  UserList,
-  Wallet,
-} from '@phosphor-icons/react';
+import { Buildings, Gauge, Kanban, UserCirclePlus, UserList, Wallet } from '@phosphor-icons/react';
 import { Menu, MenuItem, Sidebar, SubMenu } from 'react-pro-sidebar';
 
 function Main() {
@@ -30,14 +21,16 @@ function Main() {
     <div className="flex h-screen">
       {user && (
         <Sidebar
+          width="200px"
           backgroundColor="white"
           breakPoint="sm"
           style={{ height: '100vh' }}
           collapsed={collapsed}
         >
-          <div className="w-full p-2" onClick={() => setCollapsed(!collapsed)}>
+          {/*           <div className="w-full p-2" onClick={() => setCollapsed(!collapsed)}>
             {!collapsed ? <CaretLeft size={24} /> : <CaretRight size={24} />}
-          </div>
+          </div> */}
+          <h1 className="font-bold py-5">PipeFly</h1>
           <Menu>
             <MenuItem icon={<Gauge size={32} />} component={<Link to="/dashboard" />}>
               Painel

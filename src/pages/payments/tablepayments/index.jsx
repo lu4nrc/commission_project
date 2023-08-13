@@ -1,31 +1,27 @@
-import { DotsThreeVertical } from "@phosphor-icons/react";
-import React, { useState } from "react";
-import CardPayment  from "./cardpayment";
+import React from 'react';
+import CardPayment from './cardpayment';
 
-const TablePayments = ({ data }) => {
+function TablePayments({ data }) {
+  // Função para organizar o array de pagamentos e datas
+  const groupPagamentosByData = (pagamentos) => {
+    const pagamentosOrganizados = [];
+    let dataAnterior = null;
 
+    pagamentos.forEach((pagamento) => {
+      const dataPagamento = pagamento.due_date; // Certifique-se de que a propriedade "data" esteja correta
 
+      if (dataPagamento !== dataAnterior) {
+        pagamentosOrganizados.push({ data: dataPagamento });
+      }
 
-// Função para organizar o array de pagamentos e datas
-const groupPagamentosByData = (pagamentos) => {
-  const pagamentosOrganizados = [];
-  let dataAnterior = null;
+      pagamentosOrganizados.push({ ...pagamento });
+      dataAnterior = dataPagamento;
+    });
 
-  pagamentos.forEach((pagamento) => {
-    const dataPagamento = pagamento.due_date; // Certifique-se de que a propriedade "data" esteja correta
+    return pagamentosOrganizados;
+  };
 
-    if (dataPagamento !== dataAnterior) {
-      pagamentosOrganizados.push({ data: dataPagamento });
-    }
-
-    pagamentosOrganizados.push({ ...pagamento });
-    dataAnterior = dataPagamento;
-  });
-
-  return pagamentosOrganizados;
-};
-
-const pagamentosAgrupadosPorData = groupPagamentosByData(data);
+  const pagamentosAgrupadosPorData = groupPagamentosByData(data);
 
   return (
     <div className=" p-2 mt-2 border-b border-gray-200 sm:rounded-lg mx-3">
@@ -50,14 +46,14 @@ const pagamentosAgrupadosPorData = groupPagamentosByData(data);
           </tr>
         </thead>
         <tbody className="">
-         {pagamentosAgrupadosPorData &&
+          {pagamentosAgrupadosPorData &&
             pagamentosAgrupadosPorData.map((item, index) => {
-              return <CardPayment  key={index} item={item} />;
-            })} 
+              return <CardPayment key={index} item={item} />;
+            })}
         </tbody>
       </table>
     </div>
   );
-};
+}
 
 export default TablePayments;

@@ -1,17 +1,9 @@
-import InputMask from "react-input-mask";
+import InputMask from 'react-input-mask';
 
-const Input = ({
-  label,
-  type = "text",
-  id,
-  value,
-  onChange,
-  refs,
-  model,
-}) => {
+function Input({ label, type = 'text', id, value, onChange, refs, model }) {
   console.log(model);
 
-  if (model === "cnpj") {
+  if (model === 'cnpj') {
     return (
       <div className="flex flex-col  gap-1">
         <label htmlFor={id}>{label}</label>
@@ -26,21 +18,20 @@ const Input = ({
         />
       </div>
     );
-  } else {
-    return (
-      <div className="flex flex-col  gap-1">
-        <label htmlFor={id}>{label}</label>
-        <input
-          id={id}
-          ref={refs}
-          onChange={onChange}
-          className="bg-white rounded-lg py-1 w-full px-3 text-zinc-700 border border-[#e5e7eb]"
-          value={value}
-          type={type}
-        />
-      </div>
-    );
   }
-};
+  return (
+    <div className="flex flex-col  gap-1">
+      <label htmlFor={id}>{label}</label>
+      <input
+        id={id}
+        ref={refs}
+        onChange={onChange}
+        className="bg-white rounded-lg py-1 w-full px-3 text-zinc-700 border border-[#e5e7eb]"
+        value={value}
+        type={type}
+      />
+    </div>
+  );
+}
 
 export default Input;

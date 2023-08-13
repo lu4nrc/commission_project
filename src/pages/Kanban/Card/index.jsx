@@ -11,7 +11,7 @@ export default function Card({ item, index }) {
           ref={provided.innerRef}
           {...provided.draggableProps}
           {...provided.dragHandleProps}
-          className={`select-none  p-4 mb-2 min-h-[85px] rounded-md border border-slate-300 ${
+          className={`select-none  p-4 mb-2 min-h-[120px] rounded-md border border-slate-300 ${
             snapshot.isDragging ? 'bg-white/75 border border-slate-300 shadow-md ' : 'bg-white'
           } text-zinc-700`}
           /*           style={{

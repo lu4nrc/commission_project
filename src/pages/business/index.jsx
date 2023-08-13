@@ -1,37 +1,37 @@
-import { useEffect } from "react";
-import { useState } from "react";
+import { useEffect, useState } from 'react';
+import useModal from '../../hooks/useModal';
 import {
-  dbaAddBusiness,
   dbDeleteBusiness,
   dbUpdateBusiness,
+  dbaAddBusiness,
   supabase,
-} from "../../services/supabase";
-import useModal from "../../hooks/useModal";
-import CreateBusiness from "./createbusiness";
-import UpdateBusiness from "./updatebusiness";
-import Loader from "../../utils/loader";
+} from '../../services/supabase';
+import Loader from '../../utils/loader';
+import CreateBusiness from './createbusiness';
+import UpdateBusiness from './updatebusiness';
 
-const Business = () => {
+function Business() {
   const { isOpen, toggle } = useModal();
   const [Loading, setLoading] = useState(false);
 
   const [businessData, setBusinessData] = useState([]);
-  const [fetchError, setFetchError] = useState("");
+  const [fetchError, setFetchError] = useState('');
 
   const updateBusinessData = async (business, type) => {
     let newBusinessData;
     setLoading(true);
     switch (type) {
-      case "create":
+      case 'create':
         try {
           await dbaAddBusiness(business);
+          console.table(business);
           newBusinessData = [...businessData, business];
           setBusinessData(newBusinessData);
         } catch (error) {
           console.log(error);
         }
         break;
-      case "update":
+      case 'update':
         try {
           await dbUpdateBusiness(business);
           newBusinessData = businessData.map((oldBusiness) =>
@@ -43,16 +43,14 @@ const Business = () => {
         }
 
         break;
-      case "delete":
+      case 'delete':
         try {
           await dbDeleteBusiness(business);
-          newBusinessData = businessData.filter(
-            (empresa) => empresa.id !== business.id
-          );
+          newBusinessData = businessData.filter((empresa) => empresa.id !== business.id);
           setBusinessData(newBusinessData);
-          console.log("Remove OK");
+          console.log('Remove OK');
         } catch (error) {
-          console.log("error");
+          console.log('error');
         }
 
         break;
@@ -69,15 +67,15 @@ const Business = () => {
 
   const fetchBusinessData = async () => {
     setLoading(true);
-    let { data, error } = await supabase.from("business").select("*");
+    let { data, error } = await supabase.from('business').select('*');
 
     if (error) {
-      setFetchError("Não foi possível buscar");
+      setFetchError('Não foi possível buscar');
       setBusinessData([]);
       console.log(error);
     } else {
       setBusinessData(data || []);
-      setFetchError("");
+      setFetchError('');
     }
     setLoading(false);
   };
@@ -107,25 +105,20 @@ const Business = () => {
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
             {businessData &&
-              businessData.map((business) => {
-                return (
-                  <tr key={business.id}>
-                    <td className="px-6 py-4">{business.name}</td>
-                    <td className="px-6 py-4">{business.cnpj}</td>
-                    <td className="px-6 py-4">
-                      <UpdateBusiness
-                        business={business}
-                        updateBusinessData={updateBusinessData}
-                      />
-                    </td>
-                  </tr>
-                );
-              })}
+              businessData.map((business) => (
+                <tr key={business.id}>
+                  <td className="px-6 py-4">{business.name}</td>
+                  <td className="px-6 py-4">{business.cnpj}</td>
+                  <td className="px-6 py-4">
+                    <UpdateBusiness business={business} updateBusinessData={updateBusinessData} />
+                  </td>
+                </tr>
+              ))}
           </tbody>
         </table>
       </div>
     </div>
   );
-};
+}
 
 export default Business;

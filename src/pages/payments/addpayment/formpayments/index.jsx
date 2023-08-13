@@ -1,15 +1,13 @@
-import React, { useState } from "react";
-import Input from "../../../../components/input";
-import { supabase } from "../../../../services/supabase";
-import Select from "../../../../components/select";
-import { useEffect } from "react";
+import React, { useEffect, useState } from 'react';
+import Input from '../../../../components/input';
+import Select from '../../../../components/select';
+import { supabase } from '../../../../services/supabase';
 
-const FormPayments  = ({toggle, onCreateSuccess}) => {
-         //installments = Parcela
+function FormPayments({ toggle, onCreateSuccess }) {
+  //installments = Parcela
   const [installments, setInstallments] = useState(1);
   const [dueDate, setDueDate] = useState(null);
   const [paymentValue, setPaymentValue] = useState(null);
-
 
   const [selectedSalesman, setSelectedSalesman] = useState('');
   const [selectedBusiness, setselectedBusiness] = useState('');
@@ -20,26 +18,26 @@ const FormPayments  = ({toggle, onCreateSuccess}) => {
   useEffect(() => {
     const fetchData = async () => {
       const { data: salesmanData, error: salesmanError } = await supabase
-        .from("salesman")
-        .select("*");
+        .from('salesman')
+        .select('*');
 
       if (salesmanError) {
-        console.log("FetchError: ", salesmanError.message);
+        console.log('FetchError: ', salesmanError.message);
       } else {
         setSalesmans(salesmanData || []);
-         setSelectedSalesman(salesmanData[0].id);
+        setSelectedSalesman(salesmanData[0].id);
       }
 
       // Buscar  Empresas do Supabase
       const { data: businessData, error: businessError } = await supabase
-        .from("business")
+        .from('business')
         .select(`id, name, fee_amount`);
 
       if (businessError) {
-        console.log("FetchError: ", businessError.message);
+        console.log('FetchError: ', businessError.message);
       } else {
         setBusiness(businessData || []);
-        setselectedBusiness(businessData[0].id)
+        setselectedBusiness(businessData[0].id);
       }
     };
 
@@ -60,28 +58,28 @@ const FormPayments  = ({toggle, onCreateSuccess}) => {
         // Insere a parcela na lista
         payments.push({
           business_id: selectedBusiness,
-          salesman_id: selectedSalesman, 
+          salesman_id: selectedSalesman,
           payment_value: paymentValue,
           payment_status: false,
           due_date: date.toISOString(), //data de vencimento
-          installment_number: i + 1 + "/" + installments,
+          installment_number: i + 1 + '/' + installments,
         });
       }
 
-      const { data, error } = await supabase.from("payments").insert(payments);
-      console.log(payments)
-      onCreateSuccess()
-      toggle()
+      const { data, error } = await supabase.from('payments').insert(payments);
+      console.log(payments);
+      onCreateSuccess();
+      toggle();
     } catch (error) {
       console.log(error);
     }
   }
 
-console.log(selectedSalesman)
+  console.log(selectedSalesman);
 
   return (
     <div>
-        <h1 className=" text-3xl font-semibold mb-3">Pagamentos</h1>
+      <h1 className=" text-3xl font-semibold mb-3">Pagamentos</h1>
       <form className="" onSubmit={handleSubmit}>
         <div className="flex gap-2 flex-col">
           <Select
@@ -113,7 +111,6 @@ console.log(selectedSalesman)
             type="number"
           />
 
-
           <Input
             id="duedate"
             label="Data de pagamento"
@@ -124,7 +121,7 @@ console.log(selectedSalesman)
         <button type="submit">Salvar</button>
       </form>
     </div>
-  )
+  );
 }
 
-export default FormPayments 
+export default FormPayments;

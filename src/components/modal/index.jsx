@@ -1,6 +1,7 @@
-import React from "react";
+import React from 'react';
+import { X } from '@phosphor-icons/react';
 
-const Modal = (props) => {
+function Modal(props) {
   return (
     <div className="">
       {props.isOpen && (
@@ -14,8 +15,8 @@ const Modal = (props) => {
               className="w-[512px] bg-white p-5 rounded-lg overflow-hidden"
             >
               <div className="relative">
-                <button className="absolute right-0" onClick={props.toggle}>
-                  x
+                <button className="absolute right-0 bg-white" onClick={props.toggle}>
+                  <X size={32} />
                 </button>
                 {props.children}
               </div>
@@ -25,6 +26,6 @@ const Modal = (props) => {
       )}
     </div>
   );
-};
+}
 
 export default Modal;
