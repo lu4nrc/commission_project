@@ -1,19 +1,18 @@
-import { DotsThreeVertical } from '@phosphor-icons/react';
 import React from 'react';
 import { Droppable } from 'react-beautiful-dnd';
 import '../../../utils/scroll.css';
 import Card from '../Card';
 import CreateCard from '../CreateCard';
-export default function Column({ column, columnId }) {
-  const updateCardData = async (card, type) => {
-    setLoading(true);
-    let newCardData;
+import UpdateColumn from '../UpdateColumn';
+
+export default function Column({ column, columnId, updateColumnData }) {
+  const updateCards = async (item, type) => {
+    let items = [...column.items, item];
+    let updateColumn = { ...column, items };
     switch (type) {
       case 'create':
         try {
-          await dbaAddCard(card);
-          newCardData = [...columnData, card];
-          setColumnData(newCardData);
+          updateColumnData(updateColumn, 'update_items');
         } catch (error) {
           console.log(error);
         }
@@ -32,7 +31,7 @@ export default function Column({ column, columnId }) {
         break;
       case 'delete':
         try {
-          await dbDeleteBusiness(business);
+          await dbDeleteColumn(column);
           newBusinessData = businessData.filter((empresa) => empresa.id !== business.id);
           setBusinessData(newBusinessData);
           console.log('Remove OK');
@@ -45,23 +44,20 @@ export default function Column({ column, columnId }) {
       default:
         break;
     }
-    setLoading(false);
   };
 
   return (
     <div className="flex flex-col min-w-[320px] w-80" key={columnId}>
       <header className="flex justify-between h-14 bg-white border items-center p-3">
-        <div>
+        <div className="flex gap-2">
           <h2 className="font-semibold">{column.name}</h2>
           <a href="#" title="Numero de cards na coluna">
-            <span className="text-ms font-semibold text-gray-400">{column.items.length} Total</span>
+            <span className="text-ms font-semibold text-gray-400">({column.items.length})</span>
           </a>
         </div>
         <div className="flex gap-2">
-          {column.isadd && <CreateCard updateCardData={updateCardData} />}
-          <button type="button" className="cursor-pointer rounded-lg p-1">
-            <DotsThreeVertical size={24} color="gray" />
-          </button>
+          {column.isadd && <CreateCard updateCards={updateCards} />}
+          <UpdateColumn column={column} updateColumnData={updateColumnData} />
         </div>
       </header>
       <div className=" ">
@@ -72,10 +68,10 @@ export default function Column({ column, columnId }) {
               ref={provided.innerRef}
               className={`${
                 snapshot.isDraggingOver ? 'bg-red-0' : 'bg-blue-0'
-              } p-1 w-full p-3 h-[calc(100vh-115px)] overflow-y-auto column border-l-[1px]`}
+              } p-1 w-full p-3 h-[calc(100vh-115px)] overflow-y-auto column border-l-[1px] `}
             >
               {column.items.map((item, index) => (
-                <Card item={item} index={index} key={index} />
+                <Card item={item} updateCards={updateCards} index={index} key={index} />
               ))}
               {provided.placeholder}
             </div>

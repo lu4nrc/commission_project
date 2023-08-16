@@ -10,6 +10,7 @@ function BusinessForm({ toggle, updateBusinessData }) {
   const [contact, setContact] = useState([]);
   const [email, setEmail] = useState('');
   const [city, setCity] = useState('');
+  const [category, setCategory] = useState('');
   const [state, setState] = useState('');
   const [regime, setRegime] = useState('');
   const [formError, setFormError] = useState('');
@@ -23,7 +24,7 @@ function BusinessForm({ toggle, updateBusinessData }) {
     }
     try {
       await updateBusinessData(
-        { name, cnpj, fee_amount: feeAmount, contact, email, city, state, regime },
+        { name, cnpj, fee_amount: feeAmount, contact, email, city, state, regime, category },
         'create'
       );
       toggle();
@@ -42,6 +43,12 @@ function BusinessForm({ toggle, updateBusinessData }) {
           id="name"
           onChange={(e) => setName(e.target.value)}
           value={name}
+        />
+        <Input
+          label="Categoria"
+          id="name"
+          onChange={(e) => setCategory(e.target.value)}
+          value={category}
         />
 
         <div className="flex gap-2">

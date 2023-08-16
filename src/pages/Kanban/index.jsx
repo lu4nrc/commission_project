@@ -1,50 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { DragDropContext } from 'react-beautiful-dnd';
-import { v4 as uuidv4 } from 'uuid';
-import { dbUpdateColumn, dbaAddColumn, supabase } from '../../services/supabase';
+import {
+  dbUpdateColumnItems,
+  dbUpdateColumnName,
+  dbaAddColumn,
+  supabase,
+} from '../../services/supabase';
 import Loader from '../../utils/loader';
 import Column from './Column';
 import CreateColumn from './CreateColumn';
-
-const itemsFromBackend = [
-  { id: uuidv4(), content: 'First task' },
-  { id: uuidv4(), content: 'Second task' },
-  { id: uuidv4(), content: 'Third task' },
-  { id: uuidv4(), content: 'Fourth task' },
-  { id: uuidv4(), content: 'Fifth task' },
-  { id: uuidv4(), content: 'Fifth task' },
-  { id: uuidv4(), content: 'Fifth task' },
-  { id: uuidv4(), content: 'Fifth task' },
-  { id: uuidv4(), content: 'Fifth task' },
-  { id: uuidv4(), content: 'Fifth task' },
-  { id: uuidv4(), content: 'Fifth task' },
-  { id: uuidv4(), content: 'Fifth task' },
-  { id: uuidv4(), content: 'Fifth task' },
-  { id: uuidv4(), content: 'Fifth task' },
-];
-
-const columnsFromBackend = {
-  [uuidv4()]: {
-    name: 'Contato',
-    isAdd: true,
-    items: itemsFromBackend,
-  },
-  [uuidv4()]: {
-    name: 'Estudo',
-    isAdd: false,
-    items: [],
-  },
-  [uuidv4()]: {
-    name: 'Proposta',
-    isAdd: false,
-    items: [],
-  },
-  [uuidv4()]: {
-    name: 'Fechado',
-    isAdd: false,
-    items: [],
-  },
-};
 
 async function onDragEnd(result, columns, setColumns) {
   if (!result.destination) return;
@@ -68,8 +32,8 @@ async function onDragEnd(result, columns, setColumns) {
         items: destItems,
       },
     });
-    await dbUpdateColumn(sourceColumn.id, sourceItems);
-    await dbUpdateColumn(destColumn.id, destItems);
+    await dbUpdateColumnItems(sourceColumn.id, sourceItems);
+    await dbUpdateColumnItems(destColumn.id, destItems);
   } else {
     const column = columns[source.droppableId];
     const copiedItems = [...column.items];
@@ -82,7 +46,7 @@ async function onDragEnd(result, columns, setColumns) {
         items: copiedItems,
       },
     });
-    await dbUpdateColumn(column.id, copiedItems);
+    await dbUpdateColumnItems(column.id, copiedItems);
   }
 }
 
@@ -114,83 +78,58 @@ function Kanban() {
     switch (type) {
       case 'create':
         try {
-          await dbaAddColumn(column);
           newColumnData = [...columnData, column];
+          setColumnData(newColumnData);
+          await dbaAddColumn(column);
+        } catch (error) {
+          setFetchError(error);
+        }
+        break;
+      case 'update_name':
+        try {
+          await dbUpdateColumnName(column);
+          newColumnData = columnData.map((oldColumn) =>
+            oldColumn.id === column.id ? column : oldColumn
+          );
           setColumnData(newColumnData);
         } catch (error) {
           setFetchError(error);
         }
         break;
-      case 'update':
+      case 'update_items':
         try {
-          await dbUpdateColumn(column);
+          await dbUpdateColumnItems(column.id, column.items);
+          newColumnData = columnData.map((oldColumn) =>
+            oldColumn.id === column.id ? column : oldColumn
+          );
+          setColumnData(newColumnData);
         } catch (error) {
-          business;
+          setFetchError(error);
         }
-
         break;
-      case 'delete':
-        try {
-          await dbDeleteBusiness(business);
-          newBusinessData = businessData.filter((empresa) => empresa.id !== business.id);
-          setBusinessData(newBusinessData);
-          console.log('Remove OK');
-        } catch (error) {
-          console.log('error');
-        }
-
-        break;
-
       default:
         break;
     }
     setLoading(false);
   };
 
-  /*  // Função para inserir um novo item em uma coluna específica
-  async function insertItemIntoColumn(columnName, content) {
-    try {
-      // Obter os dados atuais da coluna
-      const { data: columnData, error: columnError } = await supabase
-        .from('columns')
-        .select('id, items')
-        .eq('name', columnName)
-        .single();
-
-      if (columnError) {
-        throw columnError;
-      }
-
-      const itemId = uuidv4();
-      const newItems = [...columnData.items, { id: itemId, content }];
-
-      // Atualizar os itens da coluna
-      const { data: updateData, error: updateError } = await supabase
-        .from('columns')
-        .update({ items: newItems })
-        .eq('id', columnData.id);
-
-      if (updateError) {
-        throw updateError;
-      }
-
-      console.log('Item inserido na coluna com sucesso:', updateData);
-    } catch (error) {
-      console.error('Erro ao inserir item na coluna:', error.message);
-    }
-  } */
-
   useEffect(() => {
     fetchColumnData();
   }, []);
 
+  console.log(columnData);
   return (
     <div className="w-full">
       <div className="flex w-[calc(100vw-200px)] overflow-x-auto">
         <Loader disabled={Loading} />
         <DragDropContext onDragEnd={(result) => onDragEnd(result, columnData, setColumnData)}>
           {Object.entries(columnData).map(([columnId, column], index) => (
-            <Column columnId={columnId} column={column} key={index} />
+            <Column
+              columnId={columnId}
+              column={column}
+              key={index}
+              updateColumnData={updateColumnData}
+            />
           ))}
           <div className="m-2">
             <CreateColumn updateColumnData={updateColumnData} />

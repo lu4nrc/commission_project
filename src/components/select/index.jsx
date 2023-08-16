@@ -1,6 +1,6 @@
-import React from "react";
+import React from 'react';
 
-const Select = ({ items, onChange, name, label }) => {
+function Select({ items, onChange, name, label }) {
   return (
     <div className="flex flex-col  gap-1">
       <label>{label}</label>
@@ -18,6 +18,6 @@ const Select = ({ items, onChange, name, label }) => {
       </select>
     </div>
   );
-};
+}
 
 export default Select;

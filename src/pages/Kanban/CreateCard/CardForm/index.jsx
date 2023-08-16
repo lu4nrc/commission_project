@@ -1,24 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import Button from '../../../../components/button';
-import Select from '../../../../components/select';
 import { supabase } from '../../../../services/supabase';
-export default function CardForm({ toggle, updateCardData }) {
+export default function CardForm({ toggle, updateCards }) {
   const [business, setBusiness] = useState([]);
-  const [businessId, setBusinessId] = useState([]);
+  const [selectedBusiness, setselectedBusiness] = useState('0');
   const [formError, setFormError] = useState([]);
-
   useEffect(() => {
     const fetchData = async () => {
       // Buscar  Empresas do Supabase
-      const { data: businessData, error: businessError } = await supabase
-        .from('business')
-        .select(`id, name, fee_amount`);
+      const { data, error: businessError } = await supabase.from('business').select(`*`);
 
       if (businessError) {
         console.log('FetchError: ', businessError.message);
       } else {
-        setBusiness(businessData || []);
-        setBusinessId(businessData[0].id);
+        setBusiness(data || []);
       }
     };
 
@@ -28,13 +23,16 @@ export default function CardForm({ toggle, updateCardData }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!businessId) {
+    if (!selectedBusiness) {
       setFormError('Preencha todos os campos corretamente.');
       return;
     }
     try {
-      await updateCardData({ businessId }, 'create');
+      console.log(selectedBusiness);
+      console.log(business[selectedBusiness]);
+      await updateCards(business[selectedBusiness], 'create');
       toggle();
+      setselectedBusiness('0');
     } catch (error) {
       console.log('Create Error:', error);
       setFormError('Preencha todos os campos corretamente.', error.message);
@@ -44,14 +42,23 @@ export default function CardForm({ toggle, updateCardData }) {
   return (
     <div>
       <h1 className=" text-3xl font-semibold mb-3">Adicionar card</h1>
-      <form className="" onSubmit={handleSubmit}>
+      <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
         <div className="flex gap-2 flex-col">
-          <Select
-            label="Selecionar Empresa"
-            name="business"
-            items={business}
-            onChange={(e) => setBusinessId(e.target.value)}
-          />
+          <div className="flex flex-col  gap-1">
+            <label>Selecionar empresa</label>
+            <select
+              className="bg-white rounded-lg py-1 w-full px-3 text-zinc-700 border border-[#e5e7eb]"
+              onChange={(e) => setselectedBusiness(e.target.value)}
+              name="business"
+              id="business"
+            >
+              {business.map((item, index) => (
+                <option key={item.id} value={index}>
+                  {item.name} - {item.cnpj}
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
         <Button type="submit" label="Criar Card" />
       </form>

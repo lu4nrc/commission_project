@@ -19,6 +19,7 @@ const dbaAddBusiness = async (business) => {
           city: business.city,
           state: business.state,
           regime: business.regime,
+          category: business.category,
         },
       ])
       .select();
@@ -42,25 +43,18 @@ const dbaAddColumn = async (column) => {
     throw new Error('Novo Column');
   }
 };
-const dbUpdateColumn = async (id, newItems) => {
+const dbUpdateColumnItems = async (id, newItems) => {
   try {
     await supabase.from('columns').update({ items: newItems }).eq('id', id);
   } catch (error) {
     console.log('Error Update', error);
   }
 };
-const dbaAddCard = async (column) => {
+const dbUpdateColumnName = async (column) => {
   try {
-    await supabase
-      .from('columns')
-      .insert([
-        {
-          businessid: column.name,
-        },
-      ])
-      .select();
+    await supabase.from('columns').update({ name: column.name }).eq('id', column.id);
   } catch (error) {
-    throw new Error('Novo Card');
+    console.log('Error Update', error);
   }
 };
 const dbAddPayments = async (payments) => {
@@ -97,6 +91,6 @@ export {
   dbUpdateBusiness,
   dbAddPayments,
   dbaAddColumn,
-  dbaAddCard,
-  dbUpdateColumn,
+  dbUpdateColumnItems,
+  dbUpdateColumnName,
 };

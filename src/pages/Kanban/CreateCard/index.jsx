@@ -4,7 +4,7 @@ import Modal from '../../../components/modal';
 import useModal from '../../../hooks/useModal';
 import CardForm from '../CreateCard/CardForm';
 
-export default function CreateCard({ updateCardData }) {
+export default function CreateCard({ updateCards }) {
   const { isOpen, toggle } = useModal();
 
   return (
@@ -13,7 +13,7 @@ export default function CreateCard({ updateCardData }) {
         <Plus size={16} color="#fff" />
       </button>
       <Modal isOpen={isOpen} toggle={toggle}>
-        <CardForm toggle={toggle} updateCardData={updateCardData} />
+        <CardForm toggle={toggle} updateCards={updateCards} />
       </Modal>
     </>
   );
