@@ -72,7 +72,19 @@ const dbUpdateBusiness = async (business) => {
   try {
     await supabase
       .from('business')
-      .update({ name: business.name, cnpj: business.cnpj, fee_amount: business.fee_amount })
+      .update({
+        name: business.name,
+        cnpj: business.cnpj,
+        fee_amount: business.fee_amount,
+        contact: business.contact,
+        email: business.email,
+        city: business.city,
+        state: business.state,
+        regime: business.regime,
+        category: business.category,
+        invoicing: business.invoicing,
+        collaborators: business.collaborators,
+      })
       .eq('id', business.id)
       .select();
   } catch (error) {

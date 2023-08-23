@@ -18,15 +18,30 @@ function UpdateBusinessForm({ toggle, business, updateBusinessData }) {
   const [regime, setRegime] = useState(business.regime);
   const [formError, setFormError] = useState('');
 
+
+  console.log()
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!name || !cnpj) {
+    if (!name) {
       setFormError('Preencha todos os campos corretamente.');
       return;
     }
     try {
       await updateBusinessData(
-        { ...business, name: name, cnpj: cnpj, fee_amount: feeAmount },
+        {
+          ...business,
+          name,
+          cnpj,
+          fee_amount: feeAmount,
+          contact: { name: contact.name, phone: contact.phone },
+          email,
+          city,
+          state,
+          regime,
+          category,
+          invoicing,
+          collaborators,
+        },
         'update'
       );
       toggle();
@@ -164,7 +179,7 @@ function UpdateBusinessForm({ toggle, business, updateBusinessData }) {
           </div>
           {formError && <p className="text-sm text-red-400">{formError}</p>}
         </form>
-{/*         <div className="w-1/2">
+        {/*         <div className="w-1/2">
           <span>
             Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ex recusandae eos alias,
             minima voluptate reiciendis quisquam sed veritatis suscipit id facilis, voluptates enim
