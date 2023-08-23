@@ -2,7 +2,37 @@ import React, { useState } from 'react';
 import Input from '../../../../components/input';
 //import { supabase } from "../../../../services/supabase";
 import Button from '../../../../components/button';
+import Select from '../../../../components/select';
 
+const estados = [
+  'AC',
+  'AL',
+  'AP',
+  'AM',
+  'BA',
+  'CE',
+  'DF',
+  'ES',
+  'GO',
+  'MA',
+  'MS',
+  'MT',
+  'MG',
+  'PA',
+  'PB',
+  'PR',
+  'PE',
+  'PI',
+  'RJ',
+  'RN',
+  'RS',
+  'RO',
+  'RR',
+  'SC',
+  'SP',
+  'SE',
+  'TO',
+];
 function BusinessForm({ toggle, updateBusinessData }) {
   const [name, setName] = useState('');
   const [cnpj, setCnpj] = useState('');
@@ -95,12 +125,28 @@ function BusinessForm({ toggle, updateBusinessData }) {
         <Input label="Email" id="email" onChange={(e) => setEmail(e.target.value)} value={email} />
         <div className="flex gap-2">
           <Input label="Cidade" id="city" onChange={(e) => setCity(e.target.value)} value={city} />
-          <Input
+          <div className="flex flex-col  gap-1">
+            <label>Estados</label>
+            <select
+              className="bg-white rounded-lg py-1 w-full px-3 text-zinc-700 border border-[#e5e7eb]"
+              onChange={(e) => setState(e.target.value)}
+              name={state}
+              id="state"
+            >
+              {estados.map((item) => (
+                <option key={item} value={item}>
+                  {item}
+                </option>
+              ))}
+            </select>
+          </div>
+{/*           <Select
+            items={estados}
             label="Estado"
             id="state"
             onChange={(e) => setState(e.target.value)}
             value={state}
-          />
+          /> */}
         </div>
 
         <div className="flex gap-2 justify-end">
