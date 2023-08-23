@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Input from '../../../../components/input';
-
+import { v4 as uuidv4 } from 'uuid'
 import Button from '../../../../components/button';
 
 function ColumnForm({ toggle, updateColumnData }) {
@@ -14,7 +14,7 @@ function ColumnForm({ toggle, updateColumnData }) {
       return;
     }
     try {
-      await updateColumnData({ name: name, isadd: false, items: [] }, 'create');
+      await updateColumnData({id: uuidv4(),  name: name, isadd: false, items: [] }, 'create');
       toggle();
     } catch (error) {
       console.log('Create Error:', error);

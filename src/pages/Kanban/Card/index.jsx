@@ -13,10 +13,10 @@ export default function Card({ item, index }) {
           {...provided.draggableProps}
           {...provided.dragHandleProps}
           className={`relative flex flex-col gap-1 select-none pt-6 mb-2 min-h-[175px] overflow-hidden rounded-md border border-slate-300 ${
-            snapshot.isDragging ? 'bg-white/75 border border-slate-300 shadow-md ' : 'bg-white'
+            snapshot.isDragging ? 'bg-white/75 border border-slate-300 shadow-md ' : 'dark:bg-slate-800'
           } text-zinc-700`}
         >
-          <span className="absolute top-1 right-1 bg-slate-100 px-2 rounded-full rounded-tr-lg border border-slate-300">
+          <span className="absolute top-1 right-1 bg-slate-100  px-2 rounded-full rounded-tr-lg border border-slate-300">
             {item.category}
           </span>
           <div className="flex flex-col gap-1 p-2">

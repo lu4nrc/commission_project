@@ -2,12 +2,13 @@ import React from "react";
 import { useState } from "react";
 import { Children } from "react";
 
-const Button = ({ onClick, label }) => {
+const Button = ({ onClick, label, type = 'button' }) => {
   return (
     <div>
 
     <button
-      className="py-2 px-4 rounded cursor-pointer transition bg-emerald-600 text-white"
+    type={type}
+      className="py-2 px-4 rounded cursor-pointer transition bg-[#b9925b] text-white"
       onClick={onClick}
       >
       {label}

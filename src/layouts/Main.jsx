@@ -4,9 +4,11 @@ import { useAuth } from '../contexts/auth';
 
 import { Buildings, Gauge, Kanban, UserCirclePlus, UserList, Wallet } from '@phosphor-icons/react';
 import { Menu, MenuItem, Sidebar, SubMenu } from 'react-pro-sidebar';
+import ThemeSwitcher from '../components/themeSwitcher';
 
 function Main() {
   const [collapsed, setCollapsed] = useState(false);
+  const [theme, setTheme] = useState('light');
 
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
@@ -16,39 +18,59 @@ function Main() {
       navigate('/login');
     }
   }, [user, navigate]);
-/* Luan */
+
   return (
     <div className="flex h-screen">
       {user && (
         <Sidebar
           width="200px"
-          backgroundColor="white"
+          backgroundColor={theme === 'light' ? 'white' : '#0F172A'}
+          color={theme === 'light' ? 'black' : 'white'}
           breakPoint="sm"
           style={{ height: '100vh' }}
           collapsed={collapsed}
         >
-          {/*           <div className="w-full p-2" onClick={() => setCollapsed(!collapsed)}>
-            {!collapsed ? <CaretLeft size={24} /> : <CaretRight size={24} />}
-          </div> */}
-          <h1 className="font-bold py-5">PipeFly</h1>
+          <h1 className="font-bold py-5 dark:text-white">PipeFly</h1>
           <Menu>
-            <MenuItem icon={<Gauge size={32} />} component={<Link to="/dashboard" />}>
+            <MenuItem
+              icon={<Gauge size={32} color={theme === 'light' ? 'black' : 'white'} />}
+              component={<Link to="/dashboard" />}
+            >
               Painel
             </MenuItem>
-            <SubMenu icon={<UserList size={32} />} label="Cadastros">
-              <MenuItem icon={<Buildings size={32} />} component={<Link to="/business" />}>
+            <SubMenu
+              icon={<UserList size={32} color={theme === 'light' ? 'black' : 'white'} />}
+              label="Cadastros"
+            >
+              <MenuItem
+                icon={<Buildings size={32} color={theme === 'light' ? 'black' : 'white'} />}
+                component={<Link to="/business" />}
+              >
                 Empresas
               </MenuItem>
-              <MenuItem icon={<UserCirclePlus size={32} />} component={<Link to="/salesman" />}>
+              <MenuItem
+                icon={<UserCirclePlus size={32} color={theme === 'light' ? 'black' : 'white'} />}
+                component={<Link to="/salesman" />}
+              >
                 Parceiros
               </MenuItem>
-              <MenuItem component={<Link to="/signup" />}> Usuários </MenuItem>
+              <MenuItem
+                component={<Link to="/signup" color={theme === 'light' ? 'black' : 'white'} />}
+              >
+                Usuários
+              </MenuItem>
             </SubMenu>
 
-            <MenuItem icon={<Kanban size={32} />} component={<Link to="/kanban" />}>
+            <MenuItem
+              icon={<Kanban size={32} color={theme === 'light' ? 'black' : 'white'} />}
+              component={<Link to="/kanban" />}
+            >
               Kanban
             </MenuItem>
-            <MenuItem icon={<Wallet size={32} />} component={<Link to="/payments" />}>
+            <MenuItem
+              icon={<Wallet size={32} color={theme === 'light' ? 'black' : 'white'} />}
+              component={<Link to="/payments" />}
+            >
               Pagamentos
             </MenuItem>
           </Menu>
@@ -56,22 +78,22 @@ function Main() {
       )}
       <div className="flex flex-col w-full">
         {user && (
-          <nav className="bg-white w-full h-[65px] flex justify-between items-center border-b-[1px] px-3">
-            <span className="font-medium text-lg">{/*    {user.user_metadata.first_name} */}</span>
+          <nav className="bg-[#F8FAFC] dark:bg-slate-900 dark:text-white w-full h-[65px] flex justify-between items-center border-b-[1px] dark:border-zinc-600 px-3">
+            <ThemeSwitcher theme={theme} setTheme={setTheme} />
             <div className="">
               <button
                 type="button"
                 onClick={() => {
                   signOut();
                 }}
-                className="bg-white"
+                className="text-zinc-700 dark:text-zinc-200"
               >
                 Sair
               </button>
             </div>
           </nav>
         )}
-        <div className="bg-[#F8FAFC] w-full h-full">
+        <div className="bg-[#F8FAFC] dark:bg-slate-900 w-full h-full">
           <Outlet />
         </div>
       </div>

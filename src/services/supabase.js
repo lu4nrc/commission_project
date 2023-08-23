@@ -33,6 +33,7 @@ const dbaAddColumn = async (column) => {
       .from('columns')
       .insert([
         {
+          id: column.id,
           name: column.name,
           isadd: column.isadd,
           items: [],

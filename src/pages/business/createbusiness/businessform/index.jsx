@@ -7,7 +7,7 @@ function BusinessForm({ toggle, updateBusinessData }) {
   const [name, setName] = useState('');
   const [cnpj, setCnpj] = useState('');
   const [feeAmount, setFeeAmount] = useState('');
-  const [contact, setContact] = useState([]);
+  const [contact, setContact] = useState({ name: '', phone: '' });
   const [email, setEmail] = useState('');
   const [city, setCity] = useState('');
   const [category, setCategory] = useState('');
@@ -18,7 +18,7 @@ function BusinessForm({ toggle, updateBusinessData }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!name || !cnpj || !feeAmount) {
+    if (!name || !cnpj) {
       setFormError('Preencha todos os campos corretamente.');
       return;
     }
@@ -36,20 +36,22 @@ function BusinessForm({ toggle, updateBusinessData }) {
 
   return (
     <div>
-      <h1 className="text-3xl font-semibold mb-4">Cadastro</h1>
+      <h1 className="text-3xl font-semibold mb-4 dark:text-white">Cadastro</h1>
       <form className="flex w-full flex-col gap-3" onSubmit={handleSubmit} action="">
-        <Input
-          label="Razão Social"
-          id="name"
-          onChange={(e) => setName(e.target.value)}
-          value={name}
-        />
-        <Input
-          label="Categoria"
-          id="name"
-          onChange={(e) => setCategory(e.target.value)}
-          value={category}
-        />
+        <div className="flex gap-2">
+          <Input
+            label="Razão Social"
+            id="name"
+            onChange={(e) => setName(e.target.value)}
+            value={name}
+          />
+          <Input
+            label="Categoria"
+            id="name"
+            onChange={(e) => setCategory(e.target.value)}
+            value={category}
+          />
+        </div>
 
         <div className="flex gap-2">
           <Input
@@ -73,12 +75,23 @@ function BusinessForm({ toggle, updateBusinessData }) {
           onChange={(e) => setFeeAmount(e.target.value)}
           value={feeAmount}
         />
-        <Input
-          label="Contatos"
-          id="contact"
-          onChange={(e) => setContact(e.target.value)}
-          value={contact}
-        />
+        <strong>Contato</strong>
+
+        <div className="flex gap-2">
+          <Input
+            label="Nome"
+            id="contact_name"
+            onChange={(e) => setContact({ ...contact, name: e.target.value })}
+            value={contact.name}
+          />
+          <Input
+            label="Telefone"
+            id="phone"
+            model="phone"
+            onChange={(e) => setContact({ ...contact, phone: e.target.value })}
+            value={contact.phone}
+          />
+        </div>
         <Input label="Email" id="email" onChange={(e) => setEmail(e.target.value)} value={email} />
         <div className="flex gap-2">
           <Input label="Cidade" id="city" onChange={(e) => setCity(e.target.value)} value={city} />

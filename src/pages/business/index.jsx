@@ -88,28 +88,28 @@ function Business() {
         businessData={businessData}
         updateBusinessData={updateBusinessData}
       />
-      <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
+      <div className="shadow overflow-hidden sm:rounded-lg">
+        <table className="min-w-full divide-y dark:divide-gray-400">
+          <thead className="bg-gray-50 dark:bg-slate-700">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium dark:text-white text-gray-500 uppercase tracking-wider">
                 Nome da empresa
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium dark:text-white text-gray-500 uppercase tracking-wider">
                 Cnpj
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium dark:text-white text-gray-500 uppercase tracking-wider">
                 Editar
               </th>
             </tr>
           </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
+          <tbody className="bg-white divide-y dark:divide-gray-500 dark:bg-slate-800">
             {businessData &&
               businessData.map((business) => (
                 <tr key={business.id}>
-                  <td className="px-6 py-4">{business.name}</td>
-                  <td className="px-6 py-4">{business.cnpj}</td>
-                  <td className="px-6 py-4">
+                  <td className="px-6 py-4 dark:text-slate-200">{business.name}</td>
+                  <td className="px-6 py-4 dark:text-slate-200">{business.cnpj}</td>
+                  <td className="px-6 py-4 dark:text-slate-200">
                     <UpdateBusiness business={business} updateBusinessData={updateBusinessData} />
                   </td>
                 </tr>
