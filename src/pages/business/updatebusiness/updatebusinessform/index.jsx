@@ -6,20 +6,19 @@ import { estados, regimeItems } from '../../createbusiness/businessform';
 
 function UpdateBusinessForm({ toggle, business, updateBusinessData }) {
   const [name, setName] = useState(business.name);
+  const [category, setCategory] = useState(business.category);
   const [cnpj, setCnpj] = useState(business.cnpj);
+  const [regime, setRegime] = useState(business.regime);
+  const [collaborators, setCollaborators] = useState(business.collaborators);
+  const [city, setCity] = useState(business.city);
+  const [state, setState] = useState(business.state);
+  const [invoicing, setInvoicing] = useState(business.invoicing);
   const [feeAmount, setFeeAmount] = useState(business.fee_amount);
   const [contact, setContact] = useState(business.contact);
   const [email, setEmail] = useState(business.email);
-  const [city, setCity] = useState(business.city);
-  const [invoicing, setInvoicing] = useState(business.invoicing);
-  const [collaborators, setCollaborators] = useState(business.collaborators);
-  const [category, setCategory] = useState(business.category);
-  const [state, setState] = useState(business.state);
-  const [regime, setRegime] = useState(business.regime);
   const [formError, setFormError] = useState('');
 
 
-  console.log()
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!name) {
@@ -31,6 +30,7 @@ function UpdateBusinessForm({ toggle, business, updateBusinessData }) {
         {
           ...business,
           name,
+          category,
           cnpj,
           fee_amount: feeAmount,
           contact: { name: contact.name, phone: contact.phone },
@@ -38,7 +38,6 @@ function UpdateBusinessForm({ toggle, business, updateBusinessData }) {
           city,
           state,
           regime,
-          category,
           invoicing,
           collaborators,
         },
@@ -85,6 +84,7 @@ function UpdateBusinessForm({ toggle, business, updateBusinessData }) {
             <div className="flex flex-col w-1/2 gap-1">
               <label>Regime tributário</label>
               <select
+              value={regime}
                 className="w-full bg-white rounded-lg py-1  px-3 text-zinc-700 border border-[#e5e7eb]"
                 onChange={(e) => setRegime(e.target.value)}
                 name={regime}
@@ -98,6 +98,7 @@ function UpdateBusinessForm({ toggle, business, updateBusinessData }) {
               </select>
             </div>
             <Input
+            value={collaborators || ''}
               label="Qt. de Colaborador"
               id="collaborators"
               onChange={(e) => setCollaborators(e.target.value)}
@@ -115,9 +116,10 @@ function UpdateBusinessForm({ toggle, business, updateBusinessData }) {
             <div className="flex flex-col gap-1 w-1/4">
               <label>Estados</label>
               <select
+              value={state}
                 className="w-full bg-white rounded-lg py-1 px-3 text-zinc-700 border border-[#e5e7eb]"
                 onChange={(e) => setState(e.target.value)}
-                name={state}
+                name='state'
                 id="state"
               >
                 {estados.map((item, index) => (
@@ -130,6 +132,7 @@ function UpdateBusinessForm({ toggle, business, updateBusinessData }) {
           </div>
           <div className="flex gap-1">
             <Input
+            value={invoicing || ''}
               label="Faturamento"
               id="invoicing"
               onChange={(e) => setInvoicing(e.target.value)}
