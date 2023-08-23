@@ -26,7 +26,7 @@ function ColumnForm({ toggle, updateColumnData, column }) {
     <div>
       <h1 className="text-3xl font-semibold mb-4">Atualizar Coluna</h1>
       <form className="flex w-full flex-col gap-3" onSubmit={handleSubmit}>
-        <Input label="Novo nome" id="name" onChange={(e) => setName(e.target.value)} value={name} />
+        <Input w='w-full' label="Novo nome" id="name" onChange={(e) => setName(e.target.value)} value={name} />
 
         <div className="flex gap-2 justify-end">
           <Button

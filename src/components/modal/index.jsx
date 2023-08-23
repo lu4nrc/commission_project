@@ -12,7 +12,7 @@ function Modal({ isOpen, toggle, children }) {
           <div className="flex w-full justify-center items-center h-full">
             <div
               onClick={(e) => e.stopPropagation()}
-              className="w-[512px] bg-white dark:bg-slate-800 p-5 rounded-lg overflow-hidden"
+              className="m-4 bg-white dark:bg-slate-800 p-5 rounded-lg overflow-hidden"
             >
               <div className="relative">
                 <button

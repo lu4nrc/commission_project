@@ -22,7 +22,7 @@ export default function Card({ item, index }) {
           <div className="flex flex-col gap-1 p-2">
             <p className="font-semibold">{item.name}</p>
             <p className="font-normal text-sm">{item.cnpj}</p>
-            <p className="font-normal text-xs">{item.contact}</p>
+            <p className="font-normal text-xs">{item.contact.name}</p>
             <p className="font-normal text-xs">
               {item.city} - {item.state}
             </p>

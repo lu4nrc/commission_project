@@ -20,6 +20,8 @@ const dbaAddBusiness = async (business) => {
           state: business.state,
           regime: business.regime,
           category: business.category,
+          invoicing: business.invoicing,
+          collaborators: business.collaborators,
         },
       ])
       .select();
