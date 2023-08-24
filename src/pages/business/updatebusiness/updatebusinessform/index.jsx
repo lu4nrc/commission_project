@@ -56,7 +56,7 @@ function UpdateBusinessForm({ toggle, business, updateBusinessData }) {
 
   return (
     <div className="">
-      <h1 className="text-3xl font-semibold mb-4">Atualizar Dados</h1>
+      
       <div className="flex gap-3">
         <form className="flex flex-col gap-3" onSubmit={handleSubmit} action="">
           <Input
@@ -85,7 +85,7 @@ function UpdateBusinessForm({ toggle, business, updateBusinessData }) {
               <label>Regime tributário</label>
               <select
               value={regime}
-                className="w-full bg-white rounded-lg py-1  px-3 text-zinc-700 border border-[#e5e7eb]"
+                className="w-full bg-slate-50 rounded-lg py-1  px-3 text-zinc-700 border border-[#e5e7eb]"
                 onChange={(e) => setRegime(e.target.value)}
                 name={regime}
                 id="regime"
@@ -117,7 +117,7 @@ function UpdateBusinessForm({ toggle, business, updateBusinessData }) {
               <label>Estados</label>
               <select
               value={state}
-                className="w-full bg-white rounded-lg py-1 px-3 text-zinc-700 border border-[#e5e7eb]"
+                className="w-full bg-slate-50 rounded-lg py-1 px-3 text-zinc-700 border border-[#e5e7eb]"
                 onChange={(e) => setState(e.target.value)}
                 name='state'
                 id="state"

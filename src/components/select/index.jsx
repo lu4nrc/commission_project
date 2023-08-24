@@ -5,7 +5,7 @@ function Select({ items, onChange, name, label }) {
     <div className="flex flex-col  gap-1">
       <label>{label}</label>
       <select
-        className="bg-white rounded-lg py-1 w-full px-3 text-zinc-700 border border-[#e5e7eb]"
+        className="bg-slate-50 rounded-lg py-1 w-full px-3 text-zinc-700 border border-[#e5e7eb]"
         onChange={onChange}
         name={name}
         id={name}

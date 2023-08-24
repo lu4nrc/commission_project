@@ -79,7 +79,7 @@ function Main() {
       <div className="flex flex-col w-full">
         {user && (
           <nav className="bg-[#F8FAFC] dark:bg-slate-900 dark:text-white w-full h-[65px] flex justify-between items-center border-b-[1px] dark:border-zinc-600 px-3">
-            <ThemeSwitcher theme={theme} setTheme={setTheme} />
+            <div>{/* <ThemeSwitcher theme={theme} setTheme={setTheme} /> */}</div>
             <div className="">
               <button
                 type="button"

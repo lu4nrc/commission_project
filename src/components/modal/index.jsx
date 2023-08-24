@@ -1,33 +1,34 @@
 import React from 'react';
 import { X } from '@phosphor-icons/react';
 
-function Modal({ isOpen, toggle, children }) {
+function Modal({ isOpen, toggle, children, title }) {
   return (
-    <div className="">
+    <>
       {isOpen && (
         <div
-          className="absolute m-auto top-0 bottom-0 left-0 right-0 z-20 dark:bg-white/20 bg-black/20"
+          className="absolute flex justify-center items-center m-auto top-0 bottom-0 left-0 right-0 z-20 dark:bg-white/20 bg-black/20"
           onClick={toggle}
         >
-          <div className="flex w-full justify-center items-center h-full">
-            <div
-              onClick={(e) => e.stopPropagation()}
-              className="m-4 bg-white dark:bg-slate-800 p-5 rounded-lg overflow-hidden"
-            >
-              <div className="relative">
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className=" bg-white dark:bg-slate-800 rounded-md overflow-hidden"
+          >
+            <div className="relative">
+              <div className="flex gap-3 justify-between px-3 pt-1">
+              <h1 className="text-3xl font-semibold ">{title}</h1>
                 <button
-                  className="absolute right-0 bg-transparent dark:text-white"
+                  className=" bg-transparent dark:text-white"
                   onClick={toggle}
                 >
-                  <X size={32} />
+                  <X size={24} color='gray'/>
                 </button>
-                {children}
               </div>
             </div>
+            <div className="relative p-3">{children}</div>
           </div>
         </div>
       )}
-    </div>
+    </>
   );
 }
 

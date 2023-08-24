@@ -14,7 +14,7 @@ const { isOpen, toggle } = useModal();
       <div>
         <button className="bg-white" onClick={toggle}><DotsThreeVertical color="gray" size={32} /></button>
       </div>
-      <Modal isOpen={isOpen} toggle={toggle}>
+      <Modal isOpen={isOpen} toggle={toggle} title="Atualizar Dados">
         <UpdateSalesmanForm toggle={toggle} id={id} onUpdateSuccess={onUpdateSuccess}/>
       </Modal>
     </th>

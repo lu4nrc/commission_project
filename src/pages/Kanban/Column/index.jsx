@@ -47,7 +47,7 @@ export default function Column({ column, columnId, updateColumnData }) {
   };
 
   return (
-    <div className="flex flex-col min-w-[320px] w-80" key={columnId}>
+    <div className="flex flex-col min-w-[310px] w-80" key={columnId}>
       <header className="flex justify-between h-14 bg-white border items-center p-3">
         <div className="flex gap-2">
           <h2 className="font-semibold">{column.name}</h2>

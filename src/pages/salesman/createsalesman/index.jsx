@@ -12,7 +12,7 @@ function CreateSalesman({ onCreateSuccess }) {
         <h1 className="text-3xl font-semibold mb-4">Parceiros</h1>
         <Button onClick={toggle} label="Cadastrar Parceiro" />
       </div>
-      <Modal isOpen={isOpen} toggle={toggle}>
+      <Modal isOpen={isOpen} toggle={toggle} title='Cadastrar'>
         <SalesmanForm toggle={toggle} onCreateSuccess={onCreateSuccess} />
       </Modal>
     </div>

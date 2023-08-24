@@ -12,7 +12,7 @@ function CreateBusiness({ updateBusinessData }) {
         <h1 className="text-3xl font-semibold mb-4 dark:text-white">Empresas</h1>
         <Button onClick={toggle} label="Criar nova Empresa" />
       </div>
-      <Modal isOpen={isOpen} toggle={toggle}>
+      <Modal isOpen={isOpen} toggle={toggle} title="Cadastro">
         <BusinessForm toggle={toggle} updateBusinessData={updateBusinessData} />
       </Modal>
     </div>

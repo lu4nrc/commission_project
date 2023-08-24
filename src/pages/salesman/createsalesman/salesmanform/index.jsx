@@ -2,8 +2,9 @@ import React, { useEffect } from "react";
 import { useState } from "react";
 import Input from "../../../../components/input";
 import { supabase } from "../../../../services/supabase";
+import Button from "../../../../components/button";
 
-const SalesmanForm = ({ toggle, onCreateSuccess }) => {
+function SalesmanForm  ({ toggle, onCreateSuccess })  {
   const [name, setName] = useState("");
   const [formError, setFormError] = useState("");
 
@@ -36,13 +37,13 @@ const SalesmanForm = ({ toggle, onCreateSuccess }) => {
 
   return (
     <div>
-      <h1 className="text-3xl mb-4">Cadastro</h1>
       <form
         className="flex w-full flex-col gap-3"
         onSubmit={handleSubmit}
         action=""
       >
         <Input
+        w="w-full"
           label="Nome"
           id="name"
           onChange={(e) => setName(e.target.value)}
@@ -50,9 +51,8 @@ const SalesmanForm = ({ toggle, onCreateSuccess }) => {
         />
 
         <div className="flex gap-2 justify-end">
-          <button className="bg-emerald-500 px-3 py-2 rounded" type="submit">
-            Criar
-          </button>
+          <Button label="Criar"  type="submit"
+          />
         </div>
         {formError && <p className="text-sm text-red-400">{formError}</p>}
       </form>

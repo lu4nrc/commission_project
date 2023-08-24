@@ -75,19 +75,19 @@ const UpdateSalesmanForm = ({ toggle, id, onUpdateSuccess }) => {
 
   return (
     <div>
-      <h1 className="text-3xl text-left mb-4">Atualizar Dados</h1>
       <form
         className="flex w-full flex-col gap-3"
         onSubmit={handleSubmit}
       >
         <Input
+        w="w-full"
           label="Nome"
           id="name"
           onChange={(e) => setName(e.target.value)}
           value={name}
         />
 
-        <div className="flex gap-2 justify-end">
+        <div className="flex gap-2bg-slate-50">
           <button
             onClick={() => handleDelete(id)}
             className=" px-2 py-1 border border-red-500 rounded text-red-600"

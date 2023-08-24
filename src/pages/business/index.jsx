@@ -81,14 +81,14 @@ function Business() {
   };
 
   return (
-    <div className="flex p-2 flex-col">
+    <div className="flex p-2 flex-col ">
       <Loader disabled={Loading} />
       <CreateBusiness
         setBusinessData={setBusinessData}
         businessData={businessData}
         updateBusinessData={updateBusinessData}
       />
-      <div className="shadow overflow-hidden sm:rounded-lg">
+      <div className="shadow overflow-hidden sm:rounded-lg  w-full  h-[calc(100vh-115px)] overflow-y-auto column ">
         <table className="min-w-full divide-y dark:divide-gray-400">
           <thead className="bg-gray-50 dark:bg-slate-700">
             <tr>
@@ -103,11 +103,16 @@ function Business() {
               </th>
             </tr>
           </thead>
-          <tbody className="bg-white divide-y dark:divide-gray-500 dark:bg-slate-800">
+          <tbody className="bg-white divide-y dark:divide-gray-500 dark:bg-slate-800 h-[calc(100vh-115px)] overflow-y-auto">
             {businessData &&
               businessData.map((business) => (
                 <tr key={business.id}>
-                  <td className="px-6 py-4 dark:text-slate-200">{business.name}</td>
+                  <td className="px-6 py-4 dark:text-slate-200">
+                    <div className='flex flex-col font-medium '>
+                      {business.name}
+                      <span className='text-xs text-gray-500'>{business.contact.name}</span>
+                    </div>
+                  </td>
                   <td className="px-6 py-4 dark:text-slate-200">{business.cnpj}</td>
                   <td className="px-6 py-4 dark:text-slate-200">
                     <UpdateBusiness business={business} updateBusinessData={updateBusinessData} />

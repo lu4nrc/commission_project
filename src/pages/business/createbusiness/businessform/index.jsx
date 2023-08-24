@@ -82,7 +82,6 @@ function BusinessForm({ toggle, updateBusinessData }) {
 
   return (
     <div>
-      <h1 className="text-3xl font-semibold mb-4 dark:text-white">Cadastro</h1>
       <form className="flex w-full flex-col gap-3" onSubmit={handleSubmit} action="">
         <Input
           w="w-full"
@@ -109,7 +108,7 @@ function BusinessForm({ toggle, updateBusinessData }) {
           <div className="flex flex-col w-1/2 gap-1">
             <label>Regime tributário</label>
             <select
-              className="w-full bg-white rounded-lg py-1  px-3 text-zinc-700 border border-[#e5e7eb]"
+              className="w-full bg-slate-50 rounded-lg py-1  px-3 text-zinc-700 border border-[#e5e7eb]"
               onChange={(e) => setRegime(e.target.value)}
               name={regime}
               id="regime"
@@ -139,7 +138,7 @@ function BusinessForm({ toggle, updateBusinessData }) {
           <div className="flex flex-col gap-1 w-1/4">
             <label>Estados</label>
             <select
-              className="w-full bg-white rounded-lg py-1 px-3 text-zinc-700 border border-[#e5e7eb]"
+              className="w-full bg-slate-50 rounded-lg py-1 px-3 text-zinc-700 border border-[#e5e7eb]"
               onChange={(e) => setState(e.target.value)}
               name={state}
               id="state"

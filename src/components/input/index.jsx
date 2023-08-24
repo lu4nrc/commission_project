@@ -14,7 +14,7 @@ function Input({ label, type = 'text', id, value, onChange, refs, model, w= 'w-1
           mask="99.999.999/9999-99"
           ref={refs}
           onChange={onChange}
-          className="w-full bg-white dark:bg-slate-700 rounded-lg py-1 px-3 text-zinc-700 dark:text-white border border-[#e5e7eb] dark:border-slate-600"
+          className="w-full bg-slate-50 dark:bg-slate-700 rounded-lg py-1 px-3 text-zinc-700 dark:text-white border border-[#e5e7eb] dark:border-slate-600"
           value={value}
           type={type}
         />
@@ -31,7 +31,7 @@ function Input({ label, type = 'text', id, value, onChange, refs, model, w= 'w-1
         mask="(99) 9 9999-9999"
         ref={refs}
         onChange={onChange}
-        className="w-full bg-white  dark:bg-slate-700 rounded-lg py-1 px-3 text-zinc-700 dark:text-white border border-[#e5e7eb] dark:border-slate-600"
+        className="bg-slate-50 w-full  dark:bg-slate-700 rounded-lg py-1 px-3 text-zinc-700 dark:text-white border border-[#e5e7eb] dark:border-slate-600"
         value={value}
         type={type}
       />
@@ -46,7 +46,7 @@ function Input({ label, type = 'text', id, value, onChange, refs, model, w= 'w-1
         id={id}
         ref={refs}
         onChange={onChange}
-        className="w-full bg-white dark:bg-slate-700 rounded-lg py-1 px-3 text-zinc-700 dark:text-white border border-[#e5e7eb] dark:border-slate-600"
+        className="w-full bg-slate-50 dark:bg-slate-700 rounded-lg py-1 px-3 text-zinc-700 dark:text-white border border-[#e5e7eb] dark:border-slate-600"
         value={value}
         type={type}
       />
