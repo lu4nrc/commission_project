@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import Input from '../../../../components/input';
 //import { supabase } from "../../../../services/supabase";
 import Button from '../../../../components/button';
-import Select from '../../../../components/select';
 
 export const regimeItems = ['Simples Nacional', 'Lucro Real', 'Lucro Presumido'];
 

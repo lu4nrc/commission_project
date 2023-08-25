@@ -4,7 +4,7 @@ import Input from "../../../../components/input";
 import { supabase } from "../../../../services/supabase";
 import Button from "../../../../components/button";
 
-const UpdateSalesmanForm = ({ toggle, id, onUpdateSuccess }) => {
+function UpdateSalesmanForm  ({ toggle, id, onUpdateSuccess })  {
   const [name, setName] = useState("");
 
   const [formError, setFormError] = useState('');

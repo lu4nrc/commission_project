@@ -5,7 +5,7 @@ import UpdateSalesmanForm from "./updatesalesmanform";
 
 
 
-const UpdateSalesman = ({id, onUpdateSuccess}) => {
+function UpdateSalesman  ({id, onUpdateSuccess})  {
 
 const { isOpen, toggle } = useModal();
 

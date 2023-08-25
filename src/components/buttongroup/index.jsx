@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const ButtonGroup = ({actionOne, actionTwo, actionThree}) => {
+function ButtonGroup ({actionOne, actionTwo, actionThree})  {
   const [activeButton, setActiveButton] = useState(1);
 
   const handleButtonClick = (buttonId) => {
