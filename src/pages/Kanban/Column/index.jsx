@@ -2,7 +2,7 @@ import React from 'react';
 import { Droppable } from 'react-beautiful-dnd';
 import '../../../utils/scroll.css';
 import Card from '../Card';
-import CreateCard from '../CreateCard';
+import CreateCard from '../Card/CreateCard';
 import UpdateColumn from '../UpdateColumn';
 
 export default function Column({ column, columnId, updateColumnData }) {
@@ -17,6 +17,7 @@ export default function Column({ column, columnId, updateColumnData }) {
           console.log(error);
         }
         break;
+
       case 'update':
         try {
           await dbUpdateBusiness(business);
@@ -42,7 +43,7 @@ export default function Column({ column, columnId, updateColumnData }) {
         break;
 
       default:
-        break;
+        break; 
     }
   };
 
@@ -60,7 +61,7 @@ export default function Column({ column, columnId, updateColumnData }) {
           <UpdateColumn column={column} updateColumnData={updateColumnData} />
         </div>
       </header>
-      <div className=" ">
+      <div>
         <Droppable droppableId={columnId} key={columnId}>
           {(provided, snapshot) => (
             <div
@@ -70,8 +71,8 @@ export default function Column({ column, columnId, updateColumnData }) {
                 snapshot.isDraggingOver ? 'bg-red-0' : 'bg-blue-0'
               } p-1 w-full p-3 h-[calc(100vh-115px)] overflow-y-auto column border-l-[1px] `}
             >
-              {column.items.map((item, index) => (
-                <Card item={item} updateCards={updateCards} index={index} key={index} />
+              {column.items.map((card, index) => (
+                <Card card={card} updateCards={updateCards} index={index} key={index} />
               ))}
               {provided.placeholder}
             </div>

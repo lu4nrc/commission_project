@@ -3,7 +3,7 @@ import { supabase } from "../../services/supabase";
 import Input from "../../components/input";
 import Loader from "../../utils/loader";
 
-const Signup = () => {
+function Signup  ()  {
   const firstNameRef = useRef(null);
   const emailRef = useRef(null);
   const passwordRef = useRef(null);
@@ -62,8 +62,8 @@ const Signup = () => {
     <div className="p-4">
       <Loader disabled={loading} />
       <form className="flex flex-col gap-2" onSubmit={handleSubmit}>
-        <Input id="first_name" label="Nome" type="text" refs={firstNameRef} />
-        <Input id="email" label="Email" type="email" refs={emailRef} />
+        <Input w="w-full" id="first_name" label="Nome" type="text" refs={firstNameRef} />
+        <Input w="w-full" id="email" label="Email" type="email" refs={emailRef} />
         <div className="flex flex-col gap-1">
           <label>Perfil</label>
           <select

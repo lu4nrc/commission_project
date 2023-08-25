@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import useModal from '../../hooks/useModal';
+
 import {
   dbDeleteBusiness,
   dbUpdateBusiness,
@@ -11,7 +11,7 @@ import CreateBusiness from './createbusiness';
 import UpdateBusiness from './updatebusiness';
 
 function Business() {
-  const { isOpen, toggle } = useModal();
+
   const [Loading, setLoading] = useState(false);
 
   const [businessData, setBusinessData] = useState([]);

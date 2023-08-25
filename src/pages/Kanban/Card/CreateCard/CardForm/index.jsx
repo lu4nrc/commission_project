@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import Button from '../../../../components/button';
-import { supabase } from '../../../../services/supabase';
+import Button from '../../../../../components/button';
+import { supabase } from '../../../../../services/supabase';
 export default function CardForm({ toggle, updateCards }) {
   const [business, setBusiness] = useState([]);
   const [selectedBusiness, setselectedBusiness] = useState('0');

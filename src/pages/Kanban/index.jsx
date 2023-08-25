@@ -9,6 +9,7 @@ import {
 import Loader from '../../utils/loader';
 import Column from './Column';
 import CreateColumn from './CreateColumn';
+import UpdateBusiness from '../business/updatebusiness';
 
 async function onDragEnd(result, columns, setColumns) {
   if (!result.destination) return;
