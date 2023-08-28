@@ -22,6 +22,7 @@ const dbaAddBusiness = async (business) => {
           category: business.category,
           invoicing: business.invoicing,
           collaborators: business.collaborators,
+          temperature: business.temperature,
         },
       ])
       .select();

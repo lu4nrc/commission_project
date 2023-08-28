@@ -7,6 +7,7 @@ import UpdateColumn from '../UpdateColumn';
 
 export default function Column({ column, columnId, updateColumnData }) {
   const updateCards = async (item, type) => {
+    console.log(column.items)
     let items = [...column.items, item];
     let updateColumn = { ...column, items };
     switch (type) {

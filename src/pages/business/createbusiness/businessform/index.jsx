@@ -69,6 +69,7 @@ function BusinessForm({ toggle, updateBusinessData }) {
           category,
           invoicing,
           collaborators,
+          temperature: ''
         },
         'create'
       );

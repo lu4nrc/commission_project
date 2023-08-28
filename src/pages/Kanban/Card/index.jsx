@@ -13,7 +13,7 @@ export default function Card({ card, index }) {
           ref={provided.innerRef}
           {...provided.draggableProps}
           {...provided.dragHandleProps}
-          className={`shadow-md border border-gray-50 bg-white relative flex flex-col gap-1 select-none pt-6 mb-2 h-[150px] overflow-hidden rounded-md  ${
+          className={`shadow-md border border-gray-50 bg-white relative flex flex-col gap-1 select-none pt-6 mb-2 h-[155px] overflow-hidden rounded-md  ${
             snapshot.isDragging ? 'bg-white/75 border border-slate-300 shadow-lg ' : 'dark:bg-slate-800'
           } text-zinc-700`}
         >
@@ -21,10 +21,10 @@ export default function Card({ card, index }) {
             {card.category}
           </span>
           <div className="flex flex-col gap-1 p-2">
-            <p className="font-semibold">{card.name}</p>
+            <p className="font-semibold truncate">{card.name}</p>
             {/* <p className="font-normal text-sm">{card.cnpj}</p> */}
-            <p className="font-medium text-xs">{card.contact.name}</p>
-            <p className="font-normal text-xs">
+            <p className="font-medium text-xs truncate">{card.contact.name}</p>
+            <p className="font-normal text-xs truncate">
               {card.city} - {card.state}
             </p>
           </div>
@@ -33,9 +33,7 @@ export default function Card({ card, index }) {
               <ChatCentered size={18} />
               <p className="text-center">{card.comments.length}</p>
             </button>
-            <button type="button">
               <UpdateCard />
-            </button>
           </div>
         </div>
       )}

@@ -9,7 +9,6 @@ import {
 import Loader from '../../utils/loader';
 import Column from './Column';
 import CreateColumn from './CreateColumn';
-import UpdateBusiness from '../business/updatebusiness';
 
 async function onDragEnd(result, columns, setColumns) {
   if (!result.destination) return;
@@ -99,9 +98,10 @@ function Kanban() {
         break;
       case 'update_items':
         try {
-          await dbUpdateColumnItems(column.id, column.items);
+          console.log("update in Kanban: ", column, columnData)
+           await dbUpdateColumnItems(column.id, column.items);
           newColumnData = columnData.map((oldColumn) =>
-            oldColumn.id === column.id ? column : oldColumn
+          oldColumn.id === column.id ? column : oldColumn
           );
           setColumnData(newColumnData);
         } catch (error) {
