@@ -13,6 +13,7 @@ export default function CardForm({ toggle, updateCards }) {
       if (businessError) {
         console.log('FetchError: ', businessError.message);
       } else {
+        data.sort((a, b) => a.name.localeCompare(b.name));
         setBusiness(data || []);
       }
     };

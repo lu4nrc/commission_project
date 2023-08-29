@@ -73,6 +73,7 @@ function Business() {
       setBusinessData([]);
       console.log(error);
     } else {
+      data.sort((a, b) => a.name.localeCompare(b.name));
       setBusinessData(data || []);
       setFetchError('');
     }
