@@ -24,11 +24,11 @@ function Business() {
       case 'create':
         try {
           await dbaAddBusiness(business);
-          console.table(business);
           newBusinessData = [...businessData, business];
           setBusinessData(newBusinessData);
+          console.log('Coluna adicionada com sucesso!')
         } catch (error) {
-          console.log(error);
+          console.error('Ocorreu um erro ao adicionar empresa:', error.message);
         }
         break;
       case 'update':
@@ -48,9 +48,8 @@ function Business() {
           await dbDeleteBusiness(business);
           newBusinessData = businessData.filter((empresa) => empresa.id !== business.id);
           setBusinessData(newBusinessData);
-          console.log('Remove OK');
         } catch (error) {
-          console.log('error');
+          console.log(error);
         }
 
         break;

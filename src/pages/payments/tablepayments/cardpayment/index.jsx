@@ -4,7 +4,6 @@ import React, { useState } from 'react';
 
 function CardPayment({ item }) {
   const [paymentStatus, setPaymentStatus] = useState(item.payment_status);
-  console.log(item);
 
   //ChatGPT
   function isDataMenorQueDataAtual(data) {

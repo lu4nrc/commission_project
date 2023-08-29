@@ -8,7 +8,7 @@ export default function CardForm({ toggle, updateCards }) {
   useEffect(() => {
     const fetchData = async () => {
       // Buscar  Empresas do Supabase
-      const { data, error: businessError } = await supabase.from('business').select(`*`);
+      const { data, error: businessError } = await supabase.from('business').select(`id, name, cnpj`);
 
       if (businessError) {
         console.log('FetchError: ', businessError.message);
@@ -28,8 +28,6 @@ export default function CardForm({ toggle, updateCards }) {
       return;
     }
     try {
-      console.log(selectedBusiness);
-      console.log(business[selectedBusiness]);
       await updateCards(business[selectedBusiness], 'create');
       toggle();
       setselectedBusiness('0');

@@ -24,7 +24,6 @@ export function AuthProvider({ children }) {
       const { subscription } = supabase.auth.onAuthStateChange(
         async (event, session) => {
           if (session) {
-          //  console.log("New session: ", session)
             setUser(session.user)
             localStorage.setItem("authSession", JSON.stringify(session))
             setSession(session)

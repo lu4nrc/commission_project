@@ -32,7 +32,6 @@ function UpdateSalesmanForm  ({ toggle, id, onUpdateSuccess })  {
       setFormError(null);
       onUpdateSuccess();
       toggle();
-      console.log("Update OK");
     }
   };
 

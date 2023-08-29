@@ -1,7 +1,6 @@
 import InputMask from 'react-input-mask';
 
 function Input({ label, type = 'text', id, value, onChange, refs, model, w= 'w-1/2' }) {
-  console.log(model);
 
   if (model === 'cnpj') {
     return (

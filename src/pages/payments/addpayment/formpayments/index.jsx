@@ -49,7 +49,7 @@ function FormPayments({ toggle, onCreateSuccess }) {
 
     try {
       const payments = [];
-      console.log(payments);
+
       for (let i = 0; i < installments; i++) {
         // Calcula a data de pagamento de cada parcela
         const date = new Date(dueDate);
@@ -67,15 +67,13 @@ function FormPayments({ toggle, onCreateSuccess }) {
       }
 
       const { data, error } = await supabase.from('payments').insert(payments);
-      console.log(payments);
+
       onCreateSuccess();
       toggle();
     } catch (error) {
       console.log(error);
     }
   }
-
-  console.log(selectedSalesman);
 
   return (
     <div>

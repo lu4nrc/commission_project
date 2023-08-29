@@ -4,10 +4,12 @@ import '../../../utils/scroll.css';
 import Card from '../Card';
 import CreateCard from '../Card/CreateCard';
 import UpdateColumn from '../UpdateColumn';
+import { supabase } from '../../../services/supabase';
+import { useState } from 'react';
 
 export default function Column({ column, columnId, updateColumnData }) {
+
   const updateCards = async (item, type) => {
-    console.log(column.items)
     let items = [...column.items, item];
     let updateColumn = { ...column, items };
     switch (type) {
@@ -36,15 +38,14 @@ export default function Column({ column, columnId, updateColumnData }) {
           await dbDeleteColumn(column);
           newBusinessData = businessData.filter((empresa) => empresa.id !== business.id);
           setBusinessData(newBusinessData);
-          console.log('Remove OK');
         } catch (error) {
-          console.log('error');
+          console.log(error);
         }
 
         break;
 
       default:
-        break; 
+        break;
     }
   };
 
@@ -73,7 +74,8 @@ export default function Column({ column, columnId, updateColumnData }) {
               } p-1 w-full p-3 h-[calc(100vh-115px)] overflow-y-auto column border-l-[1px] `}
             >
               {column.items.map((card, index) => (
-                <Card card={card} updateCards={updateCards} index={index} key={index} />
+               
+              <Card card={card} updateCards={updateCards} index={index} key={index} />
               ))}
               {provided.placeholder}
             </div>

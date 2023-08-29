@@ -15,7 +15,6 @@ function Login  ()  {
     setErrorMsg("");
 
     if (!passwordRef.current?.value || !emailRef.current?.value) {
-      console.log(emailRef.current?.value, passwordRef.current?.value);
       setErrorMsg("Por favor, preencha os campos");
       return;
     }

@@ -55,6 +55,9 @@ function Kanban() {
   const [fetchError, setFetchError] = useState();
   const [Loading, setLoading] = useState(false);
 
+
+  
+
   const fetchColumnData = async () => {
     setLoading(true);
     const { data, error } = await supabase.from('columns').select('*');
@@ -98,7 +101,6 @@ function Kanban() {
         break;
       case 'update_items':
         try {
-          console.log("update in Kanban: ", column, columnData)
            await dbUpdateColumnItems(column.id, column.items);
           newColumnData = columnData.map((oldColumn) =>
           oldColumn.id === column.id ? column : oldColumn

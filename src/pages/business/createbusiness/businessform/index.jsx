@@ -37,15 +37,15 @@ export const estados = [
 function BusinessForm({ toggle, updateBusinessData }) {
   const [name, setName] = useState('');
   const [cnpj, setCnpj] = useState('');
-  const [feeAmount, setFeeAmount] = useState(null);
+  const [feeAmount, setFeeAmount] = useState(0);
   const [contact, setContact] = useState({ name: '', phone: '' });
   const [email, setEmail] = useState('');
   const [city, setCity] = useState('');
-  const [invoicing, setInvoicing] = useState(null);
-  const [collaborators, setCollaborators] = useState(null);
+  const [invoicing, setInvoicing] = useState(0);
+  const [collaborators, setCollaborators] = useState(0);
   const [category, setCategory] = useState('');
   const [state, setState] = useState('');
-  const [regime, setRegime] = useState('Simples Nacional');
+  const [regime, setRegime] = useState(regimeItems[0]);
   const [formError, setFormError] = useState('');
 
   const handleSubmit = async (e) => {
@@ -65,11 +65,12 @@ function BusinessForm({ toggle, updateBusinessData }) {
           email,
           city,
           state,
+          comments: {},
           regime,
           category,
           invoicing,
           collaborators,
-          temperature: ''
+          temperature: 'FRIO',
         },
         'create'
       );
