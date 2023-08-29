@@ -1,11 +1,9 @@
-/* eslint-disable react/jsx-props-no-spreading */
-/* eslint-disable react/prop-types */
+
 import { ChatCentered, DotsThree } from '@phosphor-icons/react';
-import React from 'react';
 import { Draggable } from 'react-beautiful-dnd';
+import React, { useState, useEffect } from 'react';
 import UpdateCard from './updateCard';
 import { supabase } from '../../../services/supabase';
-import { useState, useEffect } from 'react';
 
 export default function Card({ card, index }) {
   const [cardInfor, setCardInfor] = useState();
@@ -73,7 +71,6 @@ export default function Card({ card, index }) {
           <div className="flex  p-1 ">
             <div className=" min-h-[80px] flex flex-col gap-1 p-2 w-full">
               <p className="font-semibold truncate">{cardInfor.name}</p>
-              {/* <p className="font-normal text-sm">{card.cnpj}</p> */}
               <p className="font-medium text-xs truncate">{cardInfor.contact.name}</p>
               <p className="font-normal text-xs truncate">
                 {cardInfor.city} - {cardInfor.state}
