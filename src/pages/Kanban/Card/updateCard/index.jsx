@@ -3,10 +3,7 @@ import Modal from '../../../../components/modal';
 import useModal from '../../../../hooks/useModal';
 import UpdateCardForm from './updateCardFom';
 
-function UpdateCard({ business, updateBusinessData }) {
-
-
-  
+function UpdateCard({ cardInfor, setCardInfor }) {
   const { isOpen, toggle } = useModal();
   return (
     <div>
@@ -16,11 +13,7 @@ function UpdateCard({ business, updateBusinessData }) {
         </button>
       </div>
       <Modal isOpen={isOpen} toggle={toggle} title="Atualizar Dados">
-              <UpdateCardForm
-          toggle={toggle}
-          card={business}
-          updateBusinessData={updateBusinessData}
-        /> 
+        <UpdateCardForm toggle={toggle} cardInfor={cardInfor} setCardInfor={setCardInfor} />
       </Modal>
     </div>
   );

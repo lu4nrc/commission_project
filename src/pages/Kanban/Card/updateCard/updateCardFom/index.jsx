@@ -1,41 +1,38 @@
 import React, { useEffect } from 'react';
 import { useState } from 'react';
 import Button from '../../../../../components/button';
+import { supabase } from '../../../../../services/supabase';
 
-function updateCardForm({ toggle, card, updateCardData }) {
-  const [temperature, setTemperature] = useState(card.temperature);
+function updateCardForm({ toggle, cardInfor, setCardInfor }) {
+  const [temperature, setTemperature] = useState(cardInfor.temperature);
   const [formError, setFormError] = useState('');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!temperature) {
-      setFormError('Preencha todos os campos corretamente.');
-      return;
-    }
+
     try {
-      await updateCardData(
-        {
-          ...card,
-          temperature,
-        },
-        'update'
-      );
+      await supabase.from('business').update({ temperature }).eq('id', cardInfor.id);
+      const update = { ...cardInfor, temperature };
+      setCardInfor(update);
       toggle();
     } catch (error) {
-      console.log(error);
+      console.log('Error Update', error);
     }
   };
 
-  /*     const handleDelete = async (business) => {
-      await updateBusinessData(business, 'delete');
-      toggle();
-    }; */
-
   return (
     <div className="">
-      <div className="flex gap-3">
+      <div className="flex flex-col gap-3">
+        <div className="flex gap-2">
+          <strong>Nome: </strong>
+          <p className="capitalize text-gray-500">{cardInfor.name}</p>
+        </div>
+        <div className="flex gap-2">
+          <strong>Cnpj: </strong>
+          <p className="capitalize text-gray-500">{cardInfor.cnpj}</p>
+        </div>
         <form className="flex w-full flex-col gap-3" onSubmit={handleSubmit} action="">
-          <div className="flex flex-col gap-1">
+          <div className="flex  gap-1">
             <label>Temperatura</label>
             <select
               value={temperature}
@@ -44,9 +41,9 @@ function updateCardForm({ toggle, card, updateCardData }) {
               name="temperature"
               id="temperature"
             >
-              <option value="Frio">Frio</option>
-              <option value="Frio">Morno</option>
-              <option value="Frio">Quente</option>
+              <option value="FRIO">Frio</option>
+              <option value="MORNO">Morno</option>
+              <option value="QUENTE">Quente</option>
             </select>
           </div>
 

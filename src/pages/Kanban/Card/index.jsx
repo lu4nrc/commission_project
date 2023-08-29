@@ -7,7 +7,7 @@ import { supabase } from '../../../services/supabase';
 
 export default function Card({ card, index }) {
   const [cardInfor, setCardInfor] = useState();
-
+  let tempStyle = '';
   useEffect(() => {
     const fetchData = async () => {
       // Buscar  Empresas do Supabase
@@ -27,7 +27,6 @@ export default function Card({ card, index }) {
   }, []);
 
   if (!cardInfor) {
-    // Retornar algo enquanto os dados estão sendo buscados
     return (
       <div
         className="shadow-md border border-gray-50 bg-slate-200-100 mb-2 h-[150px]  flex flex-col  select-none overflow-hidden rounded-md bg-white/75  dark:bg-slate-800 text-zinc-700">
@@ -36,7 +35,7 @@ export default function Card({ card, index }) {
     );
   }
 
-  let tempStyle = '';
+  
 
   if (cardInfor.temperature === 'FRIO') {
     tempStyle =
@@ -62,7 +61,7 @@ export default function Card({ card, index }) {
               : 'dark:bg-slate-800'
           } text-zinc-700`}
         >
-          <div className="flex justify-between h-7  px-1 pt-2">
+          <div className="flex justify-between h-8  px-1 pt-2">
             {cardInfor.temperature && <span className={tempStyle}>{cardInfor.temperature}</span>}
             <span className="  bg-slate-100 right-auto leading-tight px-2 rounded-full rounded-tr-lg border border-slate-300">
               {cardInfor.category}
@@ -82,7 +81,7 @@ export default function Card({ card, index }) {
               <ChatCentered size={18} />
               <p className="text-center">{cardInfor.comments.length}</p>
             </button>
-            <UpdateCard business={cardInfor} />
+            <UpdateCard cardInfor={cardInfor} setCardInfor={setCardInfor}/>
           </div>
         </div>
       )}
