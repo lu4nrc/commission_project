@@ -48,8 +48,15 @@ const dbaAddColumn = async (column) => {
 };
 
 const dbUpdateColumnItems = async (id, newItems) => {
+  async function extractIds(inputArray) {
+    const updateData = [];
+    await inputArray.map((item) => updateData.push({ id: item.id }));
+    return updateData;
+  }
+
   try {
-    await supabase.from('columns').update({ items: newItems }).eq('id', id);
+    const dataItems = await extractIds(newItems);
+    await supabase.from('columns').update({ items: dataItems }).eq('id', id);
   } catch (error) {
     console.log('Error Update', error);
   }
