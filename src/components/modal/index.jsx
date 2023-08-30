@@ -11,7 +11,7 @@ function Modal({ isOpen, toggle, children, title }) {
         >
           <div
             onClick={(e) => e.stopPropagation()}
-            className=" bg-white dark:bg-slate-800 rounded-md overflow-hidden"
+            className=" bg-white min-w-[512px] dark:bg-slate-800 rounded-md overflow-hidden"
           >
             <div className="relative">
               <div className="flex gap-3 justify-between px-3 pt-1">

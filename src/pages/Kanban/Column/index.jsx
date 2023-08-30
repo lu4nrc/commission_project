@@ -8,9 +8,8 @@ import { supabase } from '../../../services/supabase';
 import { useState } from 'react';
 
 export default function Column({ column, columnId, updateColumnData }) {
-
   const updateCards = async (item, type) => {
-    console.log(item)
+    console.log(item);
     let items = [...column.items, item];
     let updateColumn = { ...column, items };
     switch (type) {
@@ -76,8 +75,7 @@ export default function Column({ column, columnId, updateColumnData }) {
               } p-1 w-full p-3 h-[calc(100vh-115px)] overflow-y-auto column border-l-[1px] `}
             >
               {column.items.map((card, index) => (
-               
-              <Card card={card} updateCards={updateCards} index={index} key={index} />
+                <Card card={card} updateCards={updateCards} index={index} key={index} />
               ))}
               {provided.placeholder}
             </div>

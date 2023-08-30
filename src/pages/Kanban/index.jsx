@@ -54,7 +54,7 @@ function Kanban() {
   const [columnData, setColumnData] = useState({});
   const [fetchError, setFetchError] = useState();
   const [Loading, setLoading] = useState(false);
-
+  const [item, setItem] = useState();
 
   
 
@@ -69,7 +69,10 @@ function Kanban() {
       const sortedColumnData = [...data].sort(
         (a, b) => new Date(a.created_at) - new Date(b.created_at)
       );
-      setColumnData(sortedColumnData || []);
+
+      const updateData = await updateArray(sortedColumnData);
+
+      setColumnData(updateData || []);
       setFetchError('');
     }
     setLoading(false);
@@ -101,9 +104,9 @@ function Kanban() {
         break;
       case 'update_items':
         try {
-           await dbUpdateColumnItems(column.id, column.items);
+          await dbUpdateColumnItems(column.id, column.items);
           newColumnData = columnData.map((oldColumn) =>
-          oldColumn.id === column.id ? column : oldColumn
+            oldColumn.id === column.id ? column : oldColumn
           );
           setColumnData(newColumnData);
         } catch (error) {
@@ -119,6 +122,35 @@ function Kanban() {
   useEffect(() => {
     fetchColumnData();
   }, []);
+
+  const fetchBusiness = async (card) => {
+    const { data: businessData, error: businessError } = await supabase
+      .from('business')
+      .select(`*`)
+      .eq('id', card.id);
+  
+    if (businessError) {
+      console.log('FetchError: ', businessError.message);
+    } else {
+      return businessData[0];
+    }
+  };
+
+  async function updateArray(array) {
+    const updatedArray = await Promise.all(array.map(async (column) => {
+      const updatedCard = await Promise.all(column.items.map(async (card) => {
+        const updatedCard = await fetchBusiness(card);
+        return updatedCard;
+      }));
+  
+      return {
+        ...column,
+        items: updatedCard,
+      };
+    }));
+  
+    return updatedArray;
+  }
 
   console.log(columnData);
   return (

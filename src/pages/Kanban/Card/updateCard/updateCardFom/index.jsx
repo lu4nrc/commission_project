@@ -12,7 +12,7 @@ function updateCardForm({ toggle, cardInfor, setCardInfor }) {
 
     try {
       await supabase.from('business').update({ temperature }).eq('id', cardInfor.id);
-      const update = { ...cardInfor, temperature };
+      const update = temperature;
       setCardInfor(update);
       toggle();
     } catch (error) {
@@ -23,17 +23,42 @@ function updateCardForm({ toggle, cardInfor, setCardInfor }) {
   return (
     <div className="">
       <div className="flex flex-col gap-3">
-        <div className="flex gap-2">
-          <strong>Nome: </strong>
-          <p className="capitalize text-gray-500">{cardInfor.name}</p>
+        <div className="flex flex-col px-3">
+          <strong>Razão Social: </strong>
+          <p className="capitalize text-gray-500">{ cardInfor.name ? cardInfor.name : "-"}</p>
         </div>
-        <div className="flex gap-2">
+        <div className="flex flex-col">
           <strong>Cnpj: </strong>
-          <p className="capitalize text-gray-500">{cardInfor.cnpj}</p>
+          <p className="capitalize text-gray-500">{ cardInfor.cnpj ? cardInfor.cnpj : "-"}</p>
+        </div>
+
+        <div className="flex flex-col">
+          <strong>Categoria: </strong>
+          <p className="capitalize text-gray-500">{ cardInfor.category ? cardInfor.category : "-"}</p>
+        </div>
+        <div className="flex flex-col">
+          <strong>Faturamento: </strong>
+          <p className="capitalize text-gray-500">{ cardInfor.invoicing ? cardInfor.invoicing : "-"}</p>
+        </div>
+        <div className="flex flex-col">
+          <strong>Qnt. de colocaboradores: </strong>
+          <p className="capitalize text-gray-500">{ cardInfor.collaborators ? cardInfor.collaborators : "-"}</p>
+        </div>
+        <div className="flex flex-col">
+          <strong>Local: </strong>
+          <p className="capitalize text-gray-500">
+            { cardInfor.city ? cardInfor.city : "-"}-{ cardInfor.state ? cardInfor.state : "-"}
+          </p>
+        </div>
+        <div className="flex flex-col">
+          <strong>Contato: </strong>
+          <p className="capitalize text-gray-500">
+            {cardInfor.contact.name} - Tel: {cardInfor.contact.number}
+          </p>
         </div>
         <form className="flex w-full flex-col gap-3" onSubmit={handleSubmit} action="">
-          <div className="flex  gap-1">
-            <label>Temperatura</label>
+          <div className="flex  gap-1 items-center">
+            <strong>Temperatura: </strong>
             <select
               value={temperature}
               className="bg-slate-50 rounded-lg py-1 w-full px-3 text-zinc-700 border border-[#e5e7eb]"
@@ -45,11 +70,11 @@ function updateCardForm({ toggle, cardInfor, setCardInfor }) {
               <option value="MORNO">Morno</option>
               <option value="QUENTE">Quente</option>
             </select>
-          </div>
-
           <div className="flex gap-2 justify-end">
             <Button label="Alterar" type="submit" />
           </div>
+          </div>
+
           {formError && <p className="text-sm text-red-400">{formError}</p>}
         </form>
       </div>

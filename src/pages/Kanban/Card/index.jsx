@@ -1,32 +1,16 @@
 
 import { ChatCentered, DotsThree } from '@phosphor-icons/react';
 import { Draggable } from 'react-beautiful-dnd';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import UpdateCard from './updateCard';
 import { supabase } from '../../../services/supabase';
 
+
 export default function Card({ card, index }) {
-  const [cardInfor, setCardInfor] = useState();
+  const [temperatureValue, setTemperatureValue] = useState(card.temperature);
   let tempStyle = '';
-  useEffect(() => {
-    const fetchData = async () => {
-      // Buscar  Empresas do Supabase
-      const { data: businessData, error: businessError } = await supabase
-        .from('business')
-        .select(`*`)
-        .eq('id', card.id);
 
-      if (businessError) {
-        console.log('FetchError: ', businessError.message);
-      } else {
-        setCardInfor(businessData[0] || []);
-      }
-    };
-
-    fetchData();
-  }, []);
-
-  if (!cardInfor) {
+  if (!temperatureValue) {
     return (
       <div
         className="shadow-md border border-gray-50 bg-slate-200-100 mb-2 h-[150px]  flex flex-col  select-none overflow-hidden rounded-md bg-white/75  dark:bg-slate-800 text-zinc-700">
@@ -35,12 +19,10 @@ export default function Card({ card, index }) {
     );
   }
 
-  
-
-  if (cardInfor.temperature === 'FRIO') {
+  if (temperatureValue === 'FRIO') {
     tempStyle =
       'text-xs p-1 text-blue-700 bg-blue-100 border-blue-300 leading-tight px-2 rounded-full  border border-blue-300';
-  } else if (cardInfor.temperature === 'MORNO') {
+  } else if (temperatureValue === 'MORNO') {
     tempStyle =
       'text-xs p-1 text-orange-700 bg-orange-100 border-orange-300 leading-tight px-2 rounded-full  border border-orange-300';
   } else {
@@ -62,26 +44,26 @@ export default function Card({ card, index }) {
           } text-zinc-700`}
         >
           <div className="flex justify-between h-8  px-1 pt-2">
-            {cardInfor.temperature && <span className={tempStyle}>{cardInfor.temperature}</span>}
+            {card.temperature && <span className={tempStyle}>{temperatureValue}</span>}
             <span className="  bg-slate-100 right-auto leading-tight px-2 rounded-full rounded-tr-lg border border-slate-300">
-              {cardInfor.category}
+              {card.category}
             </span>
           </div>
           <div className="flex  p-1 ">
             <div className=" min-h-[80px] flex flex-col gap-1 p-2 w-full">
-              <p className="font-semibold truncate">{cardInfor.name}</p>
-              <p className="font-medium text-xs truncate">{cardInfor.contact.name}</p>
+              <p className="font-semibold truncate">{card.name}</p>
+              <p className="font-medium text-xs truncate">{card.contact.name}</p>
               <p className="font-normal text-xs truncate">
-                {cardInfor.city} - {cardInfor.state}
+                {card.city} - {card.state}
               </p>
             </div>
           </div>
           <div className=" bottom-0 flex justify-between border-t-[1px] max-h-8 w h-8  px-2">
             <button type="button" className="flex gap-1 text-gray-500 justify-center items-center">
               <ChatCentered size={18} />
-              <p className="text-center">{cardInfor.comments.length}</p>
+              {/* <p className="text-center">{card.comments.length}</p> */}
             </button>
-            <UpdateCard cardInfor={cardInfor} setCardInfor={setCardInfor}/>
+            <UpdateCard cardInfor={card} setCardInfor={setTemperatureValue}/>
           </div>
         </div>
       )}
