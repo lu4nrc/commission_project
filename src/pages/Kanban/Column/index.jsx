@@ -10,11 +10,13 @@ import { useState } from 'react';
 export default function Column({ column, columnId, updateColumnData }) {
 
   const updateCards = async (item, type) => {
+    console.log(item)
     let items = [...column.items, item];
     let updateColumn = { ...column, items };
     switch (type) {
       case 'create':
         try {
+          await supabase.from('business').update({ is_card: true }).eq('id', item.id);
           updateColumnData(updateColumn, 'update_items');
         } catch (error) {
           console.log(error);

@@ -6,15 +6,17 @@ export default function CardForm({ toggle, updateCards }) {
   const [selectedBusiness, setselectedBusiness] = useState('0');
   const [formError, setFormError] = useState([]);
   useEffect(() => {
-    
     const fetchData = async () => {
       // Buscar  Empresas do Supabase
-      const { data, error: businessError } = await supabase.from('business').select(`id, name, cnpj`);
+      const { data, error: businessError } = await supabase
+        .from('business')
+        .select(`id, name, contact, city, state, category, temperature, is_card`);
 
       if (businessError) {
         console.log('FetchError: ', businessError.message);
       } else {
         data.sort((a, b) => a.name.localeCompare(b.name));
+
         setBusiness(data || []);
       }
     };
