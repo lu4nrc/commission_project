@@ -7,22 +7,14 @@ import { supabase } from '../../../services/supabase';
 
 
 export default function Card({ card, index }) {
-  const [temperatureValue, setTemperatureValue] = useState(card.temperature);
+
   let tempStyle = '';
 
-  if (!temperatureValue) {
-    return (
-      <div
-        className="shadow-md border border-gray-50 bg-slate-200-100 mb-2 h-[150px]  flex flex-col  select-none overflow-hidden rounded-md bg-white/75  dark:bg-slate-800 text-zinc-700">
-        Carregando...
-      </div>
-    );
-  }
 
-  if (temperatureValue === 'FRIO') {
+  if (card.temperature === 'FRIO') {
     tempStyle =
       'text-xs p-1 text-blue-700 bg-blue-100 border-blue-300 leading-tight px-2 rounded-full  border border-blue-300';
-  } else if (temperatureValue === 'MORNO') {
+  } else if (card.temperature === 'MORNO') {
     tempStyle =
       'text-xs p-1 text-orange-700 bg-orange-100 border-orange-300 leading-tight px-2 rounded-full  border border-orange-300';
   } else {
@@ -44,7 +36,7 @@ export default function Card({ card, index }) {
           } text-zinc-700`}
         >
           <div className="flex justify-between h-8  px-1 pt-2">
-            {card.temperature && <span className={tempStyle}>{temperatureValue}</span>}
+            {card.temperature && <span className={tempStyle}>{card.temperature}</span>}
             <span className="  bg-slate-100 right-auto leading-tight px-2 rounded-full rounded-tr-lg border border-slate-300">
               {card.category}
             </span>
@@ -52,7 +44,7 @@ export default function Card({ card, index }) {
           <div className="flex  p-1 ">
             <div className=" min-h-[80px] flex flex-col gap-1 p-2 w-full">
               <p className="font-semibold truncate">{card.name}</p>
-              <p className="font-medium text-xs truncate">{card.contact.name}</p>
+              {card.contact && <p className="font-medium text-xs truncate">{card.contact.name}</p>}
               <p className="font-normal text-xs truncate">
                 {card.city} - {card.state}
               </p>
@@ -63,7 +55,7 @@ export default function Card({ card, index }) {
               <ChatCentered size={18} />
               {/* <p className="text-center">{card.comments.length}</p> */}
             </button>
-            <UpdateCard cardInfor={card} setCardInfor={setTemperatureValue}/>
+            <UpdateCard cardInfor={card}/>
           </div>
         </div>
       )}

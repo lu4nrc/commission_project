@@ -56,8 +56,6 @@ function Kanban() {
   const [Loading, setLoading] = useState(false);
   const [item, setItem] = useState();
 
-  
-
   const fetchColumnData = async () => {
     setLoading(true);
     const { data, error } = await supabase.from('columns').select('*');
@@ -123,36 +121,41 @@ function Kanban() {
     fetchColumnData();
   }, []);
 
-  const fetchBusiness = async (card) => {
-    const { data: businessData, error: businessError } = await supabase
+  //ChatGPT
+  const fetchBusinessesBatch = async (cardIds) => {
+    const { data: businessesData, error: businessesError } = await supabase
       .from('business')
-      .select(`*`)
-      .eq('id', card.id);
-  
-    if (businessError) {
-      console.log('FetchError: ', businessError.message);
+      .select('*')
+      .in('id', cardIds);
+
+    if (businessesError) {
+      console.log('FetchError: ', businessesError.message);
+      return [];
     } else {
-      return businessData[0];
+      return businessesData;
     }
   };
 
+  //ChatGPT
   async function updateArray(array) {
-    const updatedArray = await Promise.all(array.map(async (column) => {
-      const updatedCard = await Promise.all(column.items.map(async (card) => {
-        const updatedCard = await fetchBusiness(card);
-        return updatedCard;
-      }));
-  
-      return {
-        ...column,
-        items: updatedCard,
-      };
+    const cardIds = array.reduce((ids, column) => {
+      column.items.forEach((card) => ids.add(card.id));
+      return ids;
+    }, new Set());
+
+    const businessData = await fetchBusinessesBatch(Array.from(cardIds));
+
+    const updatedArray = array.map((column) => ({
+      ...column,
+      items: column.items.map((card) => {
+        const updatedCard = businessData.find((business) => business.id === card.id);
+        return updatedCard || card;
+      }),
     }));
-  
+
     return updatedArray;
   }
 
-  console.log(columnData);
   return (
     <div className="w-full">
       <div className="flex w-[calc(100vw-200px)] overflow-x-auto">
