@@ -54,7 +54,6 @@ function Kanban() {
   const [columnData, setColumnData] = useState({});
   const [fetchError, setFetchError] = useState();
   const [Loading, setLoading] = useState(false);
-  const [item, setItem] = useState();
 
   const fetchColumnData = async () => {
     setLoading(true);
@@ -76,7 +75,7 @@ function Kanban() {
     setLoading(false);
   };
 
-  const updateColumnData = async (column, type) => {
+  const updateColumnData = async (column, type, id) => {
     setLoading(true);
     let newColumnData;
     switch (type) {
@@ -85,6 +84,7 @@ function Kanban() {
           newColumnData = [...columnData, column];
           setColumnData(newColumnData);
           await dbaAddColumn(column);
+          console.log(column)
         } catch (error) {
           setFetchError(error);
         }
@@ -111,6 +111,39 @@ function Kanban() {
           setFetchError(error);
         }
         break;
+      case 'update_item':
+        console.log("update_item")
+        try {
+          console.log("update_item")
+        } catch (error) {
+          setFetchError(error);
+        }
+        break;
+
+
+
+
+      case 'delete_item':
+        console.log("delete")
+        try {
+          const updatedItems = column.items.filter((item) => item.id !== id);
+          const updatedColumn = {
+            ...column,
+            items: updatedItems,
+          };
+          const updatedColumnData = columnData.map((oldColumn) =>
+            oldColumn.id === column.id ? updatedColumn : oldColumn
+          );
+
+          setColumnData(updatedColumnData);
+  
+          await dbUpdateColumnItems(updatedColumnData[0].id,updatedColumnData[0].items)
+
+        } catch (error) {
+          setFetchError(error);
+        }
+        break;
+
       default:
         break;
     }

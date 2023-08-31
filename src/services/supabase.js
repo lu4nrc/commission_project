@@ -48,12 +48,12 @@ const dbaAddColumn = async (column) => {
 };
 
 const dbUpdateColumnItems = async (id, newItems) => {
+  console.log(id, newItems)
   async function extractIds(inputArray) {
     const updateData = [];
     await inputArray.map((item) => updateData.push({ id: item.id }));
     return updateData;
   }
-
   try {
     const dataItems = await extractIds(newItems);
     await supabase.from('columns').update({ items: dataItems }).eq('id', id);
@@ -77,6 +77,7 @@ const dbAddPayments = async (payments) => {
 };
 
 const dbUpdateBusiness = async (business) => {
+  console.log(business)
   try {
     await supabase
       .from('business')
@@ -95,6 +96,7 @@ const dbUpdateBusiness = async (business) => {
       })
       .eq('id', business.id)
       .select();
+      console.log("ok")
   } catch (error) {
     console.log('Error Update', error);
   }

@@ -3,7 +3,7 @@ import { useState } from 'react';
 import Button from '../../../../../components/button';
 import { supabase } from '../../../../../services/supabase';
 
-function updateCardForm({ toggle, cardInfor, setCardInfor }) {
+function updateCardForm({ toggle, cardInfor, updateCards }) {
   const [temperature, setTemperature] = useState(cardInfor.temperature);
   const [formError, setFormError] = useState('');
 
@@ -11,14 +11,27 @@ function updateCardForm({ toggle, cardInfor, setCardInfor }) {
     e.preventDefault();
 
     try {
-      await supabase.from('business').update({ temperature }).eq('id', cardInfor.id);
-      const update = temperature;
-      setCardInfor(update);
+      await updateCards({...cardInfor, temperature: temperature}, 'update');
+      
       toggle();
     } catch (error) {
-      console.log('Error Update', error);
+      console.log('Create Error:', error);
+      setFormError('Preencha todos os campos corretamente.', error.message);
     }
   };
+
+  const handleDelete = async (e) => {
+    e.preventDefault();
+    try {
+      await updateCards(cardInfor, 'delete');
+      
+      toggle();
+    } catch (error) {
+      console.log('Create Error:', error);
+      setFormError('Preencha todos os campos corretamente.', error.message);
+    }
+  }
+
 
   return (
     <div className="">
@@ -71,6 +84,7 @@ function updateCardForm({ toggle, cardInfor, setCardInfor }) {
               <option value="QUENTE">Quente</option>
             </select>
           <div className="flex gap-2 justify-end">
+            <Button label="Deletar" type="button" onClick={handleDelete} />
             <Button label="Alterar" type="submit" />
           </div>
           </div>

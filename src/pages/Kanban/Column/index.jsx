@@ -4,12 +4,12 @@ import '../../../utils/scroll.css';
 import Card from '../Card';
 import CreateCard from '../Card/CreateCard';
 import UpdateColumn from '../UpdateColumn';
-import { supabase } from '../../../services/supabase';
+import { dbUpdateBusiness, supabase } from '../../../services/supabase';
 import { useState } from 'react';
 
 export default function Column({ column, columnId, updateColumnData }) {
+
   const updateCards = async (item, type) => {
-    console.log(item);
     let items = [...column.items, item];
     let updateColumn = { ...column, items };
     switch (type) {
@@ -24,21 +24,17 @@ export default function Column({ column, columnId, updateColumnData }) {
 
       case 'update':
         try {
-          await dbUpdateBusiness(business);
-          newBusinessData = businessData.map((oldBusiness) =>
-            oldBusiness.id === business.id ? business : oldBusiness
-          );
-          setBusinessData(newBusinessData);
+          await supabase.from('business').update({ temperature: item.temperature }).eq('id', item.id)
+          updateColumnData(updateColumn, 'update_item', item.id)
         } catch (error) {
-          business;
+          item;
         }
 
         break;
       case 'delete':
         try {
-          await dbDeleteColumn(column);
-          newBusinessData = businessData.filter((empresa) => empresa.id !== business.id);
-          setBusinessData(newBusinessData);
+          await supabase.from('business').update({ is_card: false }).eq('id', item.id);
+          updateColumnData(updateColumn, 'delete_item', item.id)
         } catch (error) {
           console.log(error);
         }
@@ -49,6 +45,50 @@ export default function Column({ column, columnId, updateColumnData }) {
         break;
     }
   };
+
+  /*  const updateCards = async (item, type, column, businessData, setBusinessData) => {
+    console.log('updateCards');
+    
+    const updatedColumn = { ...column };
+    
+    switch (type) {
+      case 'create':
+        updatedColumn.items = [...column.items, item];
+        
+        try {
+          await supabase.from('business').update({ is_card: true }).eq('id', item.id);
+          updateColumnData(updatedColumn, 'update_items');
+          console.log(updatedColumn)
+        } catch (error) {
+          console.log(error);
+        }
+        break;
+  
+      case 'update':
+        try {
+          console.log('update');
+          await supabase.from('business').update({ temperature: item.temperature }).eq('id', item.id);
+          updateColumnData(updatedColumn, 'update_items');
+          console.log(updatedColumn);
+        } catch (error) {
+          console.log(error);
+        }
+        break;
+  
+      case 'delete':
+        try {
+          await supabase.from('business').update({ is_card: false }).eq('id', item.id);
+          const newBusinessData = businessData.filter(empresa => empresa.id !== item.id);
+          setBusinessData(newBusinessData);
+        } catch (error) {
+          console.log(error);
+        }
+        break;
+  
+      default:
+        break;
+    }
+  }; */
 
   return (
     <div className="flex flex-col min-w-[310px] w-80" key={columnId}>

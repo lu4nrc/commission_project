@@ -6,7 +6,7 @@ import UpdateCard from './updateCard';
 import { supabase } from '../../../services/supabase';
 
 
-export default function Card({ card, index }) {
+export default function Card({ card, index, updateCards }) {
 
   let tempStyle = '';
 
@@ -55,7 +55,7 @@ export default function Card({ card, index }) {
               <ChatCentered size={18} />
               {/* <p className="text-center">{card.comments.length}</p> */}
             </button>
-            <UpdateCard cardInfor={card}/>
+            <UpdateCard cardInfor={card} updateCards={updateCards}/>
           </div>
         </div>
       )}
