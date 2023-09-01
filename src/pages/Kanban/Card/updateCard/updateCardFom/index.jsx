@@ -11,8 +11,8 @@ function updateCardForm({ toggle, cardInfor, updateCards }) {
     e.preventDefault();
 
     try {
-      await updateCards({...cardInfor, temperature: temperature}, 'update');
-      
+      await updateCards({ ...cardInfor, temperature: temperature }, 'update');
+
       toggle();
     } catch (error) {
       console.log('Create Error:', error);
@@ -24,43 +24,48 @@ function updateCardForm({ toggle, cardInfor, updateCards }) {
     e.preventDefault();
     try {
       await updateCards(cardInfor, 'delete');
-      
+
       toggle();
     } catch (error) {
       console.log('Create Error:', error);
       setFormError('Preencha todos os campos corretamente.', error.message);
     }
-  }
-
+  };
 
   return (
     <div className="">
       <div className="flex flex-col gap-3">
         <div className="flex flex-col px-3">
           <strong>Razão Social: </strong>
-          <p className="capitalize text-gray-500">{ cardInfor.name ? cardInfor.name : "-"}</p>
+          <p className="capitalize text-gray-500">{cardInfor.name ? cardInfor.name : '-'}</p>
         </div>
         <div className="flex flex-col">
           <strong>Cnpj: </strong>
-          <p className="capitalize text-gray-500">{ cardInfor.cnpj ? cardInfor.cnpj : "-"}</p>
+          <p className="capitalize text-gray-500">{cardInfor.cnpj ? cardInfor.cnpj : '-'}</p>
         </div>
 
         <div className="flex flex-col">
           <strong>Categoria: </strong>
-          <p className="capitalize text-gray-500">{ cardInfor.category ? cardInfor.category : "-"}</p>
+          <p className="capitalize text-gray-500">
+            {cardInfor.category ? cardInfor.category : '-'}
+          </p>
         </div>
         <div className="flex flex-col">
           <strong>Faturamento: </strong>
-          <p className="capitalize text-gray-500">{ cardInfor.invoicing ? cardInfor.invoicing : "-"}</p>
+          <p className="capitalize text-gray-500">
+            {cardInfor.invoicing ? cardInfor.invoicing : '-'}
+          </p>
         </div>
         <div className="flex flex-col">
           <strong>Qnt. de colocaboradores: </strong>
-          <p className="capitalize text-gray-500">{ cardInfor.collaborators ? cardInfor.collaborators : "-"}</p>
+          <p className="capitalize text-gray-500">
+            {cardInfor.collaborators ? cardInfor.collaborators : '-'}
+          </p>
         </div>
         <div className="flex flex-col">
           <strong>Local: </strong>
           <p className="capitalize text-gray-500">
-            { cardInfor.city ? cardInfor.city : "-"}-{ cardInfor.state ? cardInfor.state : "-"}
+            {cardInfor.city ? cardInfor.city : '-'}-{cardInfor.state ? cardInfor.state : '-'}
           </p>
         </div>
         <div className="flex flex-col">
@@ -70,7 +75,9 @@ function updateCardForm({ toggle, cardInfor, updateCards }) {
           </p>
         </div>
         <form className="flex w-full flex-col gap-3" onSubmit={handleSubmit} action="">
-          <div className="flex  gap-1 items-center">
+          <div className="flex justify-between gap-1 items-center">
+            <div className='flex gap-2'> 
+
             <strong>Temperatura: </strong>
             <select
               value={temperature}
@@ -78,15 +85,23 @@ function updateCardForm({ toggle, cardInfor, updateCards }) {
               onChange={(e) => setTemperature(e.target.value)}
               name="temperature"
               id="temperature"
-            >
+              >
               <option value="FRIO">Frio</option>
               <option value="MORNO">Morno</option>
               <option value="QUENTE">Quente</option>
+              <option value="IMPLANTAÇÃO">Implantação</option>
             </select>
-          <div className="flex gap-2 justify-end">
-            <Button label="Deletar" type="button" onClick={handleDelete} />
-            <Button label="Alterar" type="submit" />
-          </div>
+              </div>
+            <div className="flex gap-2 justify-end">
+              <Button label="Alterar" type="submit" />
+              <button
+                type="button"
+                onClick={handleDelete}
+                className="py-2 px-4 rounded cursor-pointer transition border border-red-200 text-red-500"
+              >
+                Apagar
+              </button>
+            </div>
           </div>
 
           {formError && <p className="text-sm text-red-400">{formError}</p>}

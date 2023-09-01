@@ -17,9 +17,12 @@ export default function Card({ card, index, updateCards }) {
   } else if (card.temperature === 'MORNO') {
     tempStyle =
       'text-xs p-1 text-orange-700 bg-orange-100 border-orange-300 leading-tight px-2 rounded-full  border border-orange-300';
-  } else {
+  } else if(card.temperature === 'QUENTE') {
     tempStyle =
       'text-xs p-1 text-red-700 bg-red-100 border-red-300 leading-tight px-2 rounded-full  border border-red-300';
+  } else {
+    tempStyle =
+      'text-xs p-1 text-green-700 bg-green-100 border-green-300 leading-tight px-2 rounded-full  border border-green-300';
   }
 
   return (
