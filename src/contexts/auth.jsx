@@ -15,7 +15,6 @@ export function AuthProvider({ children }) {
   useEffect(() => {
     let gotSession = localStorage.getItem("authSession")
     if (gotSession) {
-     // console.log("Retrieved: ", gotSession)
       setSession(JSON.parse(gotSession))
       setUser(JSON.parse(gotSession))
     }

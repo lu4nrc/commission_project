@@ -6,7 +6,6 @@ const projectKey = import.meta.env.VITE_PROJECT_ANON_KEY_SUPABASE;
 export const supabase = createClient(projectURL, projectKey);
 
 const dbaAddBusiness = async (business) => {
-  console.log(business);
   try {
     await supabase.from('business').insert([
       {
@@ -42,7 +41,7 @@ const dbaAddColumn = async (column) => {
       },
     ]);
   } catch (error) {
-    console.log('supabase.js');
+    console.log('supabase.js:' error);
     throw error;
   }
 };
@@ -77,7 +76,7 @@ const dbAddPayments = async (payments) => {
 };
 
 const dbUpdateBusiness = async (business) => {
-  console.log(business)
+ 
   try {
     await supabase
       .from('business')
@@ -96,7 +95,6 @@ const dbUpdateBusiness = async (business) => {
       })
       .eq('id', business.id)
       .select();
-      console.log("ok")
   } catch (error) {
     console.log('Error Update', error);
   }

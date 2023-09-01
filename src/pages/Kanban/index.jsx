@@ -75,7 +75,7 @@ function Kanban() {
     setLoading(false);
   };
 
-  const updateColumnData = async (column, type, id) => {
+  const updateColumnData = async (column, type) => {
     setLoading(true);
     let newColumnData;
     switch (type) {
@@ -84,7 +84,6 @@ function Kanban() {
           newColumnData = [...columnData, column];
           setColumnData(newColumnData);
           await dbaAddColumn(column);
-          console.log(column)
         } catch (error) {
           setFetchError(error);
         }
@@ -102,48 +101,15 @@ function Kanban() {
         break;
       case 'update_items':
         try {
-          await dbUpdateColumnItems(column.id, column.items);
           newColumnData = columnData.map((oldColumn) =>
-            oldColumn.id === column.id ? column : oldColumn
+          oldColumn.id === column.id ? column : oldColumn
           );
           setColumnData(newColumnData);
+          await dbUpdateColumnItems(column.id, column.items);
         } catch (error) {
           setFetchError(error);
         }
         break;
-      case 'update_item':
-        console.log("update_item")
-        try {
-          console.log("update_item")
-        } catch (error) {
-          setFetchError(error);
-        }
-        break;
-
-
-
-
-      case 'delete_item':
-        console.log("delete")
-        try {
-          const updatedItems = column.items.filter((item) => item.id !== id);
-          const updatedColumn = {
-            ...column,
-            items: updatedItems,
-          };
-          const updatedColumnData = columnData.map((oldColumn) =>
-            oldColumn.id === column.id ? updatedColumn : oldColumn
-          );
-
-          setColumnData(updatedColumnData);
-  
-          await dbUpdateColumnItems(updatedColumnData[0].id,updatedColumnData[0].items)
-
-        } catch (error) {
-          setFetchError(error);
-        }
-        break;
-
       default:
         break;
     }

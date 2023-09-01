@@ -20,8 +20,6 @@ function Payments() {
   const lastDay = new Date(FinalDate.getFullYear(), FinalDate.getMonth() + 1, 0);
   const lastDayDate = lastDay.toISOString();
 
-  // console.log(firstDayDate, lastDayDate);
-
   const fetchData = async () => {
     const { data, error } = await supabase
       .from('payments')

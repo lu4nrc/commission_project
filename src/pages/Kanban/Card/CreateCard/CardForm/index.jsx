@@ -10,7 +10,7 @@ export default function CardForm({ toggle, updateCards }) {
       // Buscar Empresas do Supabase onde is_add seja false
       const { data, error: businessError } = await supabase
         .from('business')
-        .select('id, name, contact, is_card, temperature, category, city, state')
+        .select('*')
         .eq('is_card', false); // Add the filter condition here
 
       if (businessError) {

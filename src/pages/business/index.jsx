@@ -26,7 +26,6 @@ function Business() {
           await dbaAddBusiness(business);
           newBusinessData = [...businessData, business];
           setBusinessData(newBusinessData);
-          console.log('Coluna adicionada com sucesso!')
         } catch (error) {
           console.error('Ocorreu um erro ao adicionar empresa:', error.message);
         }
