@@ -41,7 +41,7 @@ const dbaAddColumn = async (column) => {
       },
     ]);
   } catch (error) {
-    console.log('supabase.js:' error);
+    console.log('supabase.js:');
     throw error;
   }
 };
@@ -96,7 +96,7 @@ const dbUpdateBusiness = async (business) => {
       .eq('id', business.id)
       .select();
   } catch (error) {
-    console.log('Error Update', error);
+    console.log('Error Update');
   }
 };
 
