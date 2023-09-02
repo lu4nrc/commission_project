@@ -4,29 +4,24 @@ import '../../../utils/scroll.css';
 import Card from '../Card';
 import CreateCard from '../Card/CreateCard';
 import UpdateColumn from '../UpdateColumn';
-import { dbUpdateBusiness, supabase } from '../../../services/supabase';
+import { supabase } from '../../../services/supabase';
 
-export default function Column({ column, columnId, updateColumnData }) {
+export default function Column({ column, columnId, updateColumnData, updateItems }) {
   const updateCards = async (item, type) => {
-
-    let items = [...column.items, item];
-    let updateColumn = { ...column, items };;
-
+    let items = [item, ...column.items ];
+    let updateColumn = { ...column, items };
 
     switch (type) {
       case 'create':
-      
         try {
-           await supabase.from('business').update({ is_card: true }).eq('id', item.id); 
-          updateColumnData(updateColumn, 'update_items');
-       
+          await supabase.from('business').update({ is_card: true }).eq('id', item.id);
+          updateItems(updateColumn);
         } catch (error) {
           console.log(error);
         }
         break;
 
       case 'update':
-      
         try {
           items = column.items.map((existingItem) => {
             if (existingItem.id === item.id) {
@@ -35,22 +30,23 @@ export default function Column({ column, columnId, updateColumnData }) {
             return existingItem;
           });
           updateColumn = { ...column, items };
+
           await supabase
             .from('business')
             .update({ temperature: item.temperature })
             .eq('id', item.id);
-          updateColumnData(updateColumn, 'update_items');
+
+          updateItems(updateColumn);
         } catch (error) {
           console.log(error);
         }
         break;
       case 'delete':
-    
         try {
           await supabase.from('business').update({ is_card: false }).eq('id', item.id);
           items = column.items.filter((existingItem) => existingItem.id !== item.id);
           updateColumn = { ...column, items };
-          updateColumnData(updateColumn, 'update_items');
+          updateItems(updateColumn);
         } catch (error) {
           console.log(error);
         }
@@ -60,7 +56,6 @@ export default function Column({ column, columnId, updateColumnData }) {
         break;
     }
   };
-
 
   return (
     <div className="flex flex-col min-w-[310px] w-80" key={columnId}>

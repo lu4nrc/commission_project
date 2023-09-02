@@ -47,7 +47,6 @@ const dbaAddColumn = async (column) => {
 };
 
 const dbUpdateColumnItems = async (id, newItems) => {
-  console.log(id, newItems)
   async function extractIds(inputArray) {
     const updateData = [];
     await inputArray.map((item) => updateData.push({ id: item.id }));

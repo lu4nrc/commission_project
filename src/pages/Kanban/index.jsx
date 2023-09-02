@@ -52,6 +52,7 @@ async function onDragEnd(result, columns, setColumns) {
 
 function Kanban() {
   const [columnData, setColumnData] = useState({});
+
   const [fetchError, setFetchError] = useState();
   const [Loading, setLoading] = useState(false);
 
@@ -99,22 +100,36 @@ function Kanban() {
           setFetchError(error);
         }
         break;
-      case 'update_items':
-        try {
-          newColumnData = columnData.map((oldColumn) =>
-          oldColumn.id === column.id ? column : oldColumn
-          );
-          setColumnData(newColumnData);
-          await dbUpdateColumnItems(column.id, column.items);
-        } catch (error) {
-          setFetchError(error);
-        }
-        break;
       default:
         break;
     }
     setLoading(false);
   };
+
+  async function updateItems(column) {
+    setLoading(true)
+  
+    try {
+      await dbUpdateColumnItems(column.id, column.items);
+      setColumnData((prevColumnData) => {
+        const updatedColumnData = { ...prevColumnData };
+    
+        // Iterar pelas chaves do objeto
+        Object.keys(updatedColumnData).forEach((columnId) => {
+          const oldColumn = updatedColumnData[columnId];
+          if (oldColumn.id === column.id) {
+            // Atualizar o objeto com base na chave
+            updatedColumnData[columnId] = column;
+          }
+        });
+    
+        return updatedColumnData;
+      });
+    } catch (error) {
+      setFetchError(error);
+    }
+    setLoading(false)
+  }
 
   useEffect(() => {
     fetchColumnData();
@@ -162,6 +177,7 @@ function Kanban() {
         <DragDropContext onDragEnd={(result) => onDragEnd(result, columnData, setColumnData)}>
           {Object.entries(columnData).map(([columnId, column], index) => (
             <Column
+            updateItems = {updateItems}
               columnId={columnId}
               column={column}
               key={index}
