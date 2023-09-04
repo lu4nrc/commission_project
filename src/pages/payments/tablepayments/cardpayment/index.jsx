@@ -2,9 +2,30 @@ import { DotsThreeVertical } from '@phosphor-icons/react';
 import dayjs from 'dayjs';
 import React, { useState } from 'react';
 import Toggle from '../../../../components/toggle';
+import { supabase } from '../../../../services/supabase';
 
 function CardPayment({ item }) {
-  const [paymentStatus, setPaymentStatus] = useState(item.payment_status);
+  const [itemData, setItemData] = useState(item);
+
+  async function handlePayment() {
+    const paymentStatus = !itemData.payment_status;
+    let paymentValue = itemData.payment_date;
+    try {
+      if (paymentStatus === true) {
+        paymentValue = new Date();
+      } else {
+        paymentValue = null;
+      }
+      const update = { ...itemData, payment_status: paymentStatus, payment_date: paymentValue };
+      setItemData(update);
+      await supabase
+        .from('payments')
+        .update({ payment_status: paymentStatus, payment_date: paymentValue })
+        .eq('id', item.id);
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   //ChatGPT
   function isDataMenorQueDataAtual(data) {
@@ -13,14 +34,14 @@ function CardPayment({ item }) {
     return dataValidar < dataAtual;
   }
 
-  if (item.data) {
-    const dataDesejada = item.data;
+  if (itemData.data) {
+    const dataDesejada = itemData.data;
     const resultado = isDataMenorQueDataAtual(dataDesejada);
     return (
       <tr>
         <td className="pl-3">
           <span className={`${resultado ? 'text-gray-400' : ''} text-xs`}>
-            {dayjs(item.data).format('DD/MM/YYYY')}
+            {dayjs(itemData.data).format('DD/MM/YYYY')}
           </span>
         </td>
       </tr>
@@ -29,31 +50,36 @@ function CardPayment({ item }) {
   return (
     <tr key={item.id}>
       <td className=" pl-3 py-4 border-y-[1px] border-l-[1px] rounded-bl-xl rounded-tl-xl bg-white border-slate-300 ">
-        <span className="font-semibold">{item.salesman.name}</span>
+        <span className="font-semibold">{itemData.salesman.name}</span>
         <br />
-        <span className="text-gray-400 text-sm">{item.business.name}</span>
+        <span className="text-gray-400 text-sm">{itemData.business.name}</span>
       </td>
-      <td className="border-y-[1px] bg-white border-slate-300 ">{item.payment_value}</td>
+      <td className="border-y-[1px] bg-white border-slate-300 ">R$ {itemData.payment_value}</td>
       <td className="border-y-[1px] bg-white border-slate-300 ">
-        <span className="font-semibold">{dayjs(item.due_date).format('DD/MM/YYYY')}</span>
+        <span className="font-semibold">{dayjs(itemData.due_date).format('DD/MM/YYYY')}</span>
         <br />
-        <span className="text-gray-400">{item.installment_number}</span>
+        <span className="text-gray-400">{itemData.installment_number}</span>
+      </td>
+      <td className="border-y-[1px] bg-white border-slate-300 ">
+        {itemData.payment_date ? (
+          <span className="font-semibold">{dayjs(itemData.payment_date).format('DD/MM/YYYY')}</span>
+        ) : (
+          <span>   -   </span>
+        )}
       </td>
       <td className="border-y-[1px] bg-white border-slate-300 ">
         <div className="flex gap-2 items-center">
           <div
             className={`w-3 h-3 ${
-              item.status_payment ? 'bg-green-600' : 'bg-yellow-600'
+              itemData.payment_status ? 'bg-green-600' : 'bg-yellow-600'
             } rounded-full `}
           />
-          {item.status_payment ? <span>Pago</span> : <span>Pendente</span>}
+          {itemData.payment_status ? <span>Pago</span> : <span>Pendente</span>}
         </div>
-        {item.payment_status && <span className="font-normal text-xs">02/04/2024</span>}
       </td>
       <td className="border-y-[1px] bg-white border-slate-300 border-r-[1px] rounded-br-xl rounded-tr-xl">
         <div className="flex">
-          <Toggle/>
-          <DotsThreeVertical color="gray" size={32} />
+          <Toggle isCheck={itemData.payment_status} onClick={handlePayment}/>
         </div>
       </td>
     </tr>

@@ -2,12 +2,14 @@ import React, { useEffect, useState } from 'react';
 import Input from '../../../../components/input';
 import Select from '../../../../components/select';
 import { supabase } from '../../../../services/supabase';
+import RealInput from '../../../../components/realinput';
 
 function FormPayments({ toggle, onCreateSuccess }) {
   //installments = Parcela
   const [installments, setInstallments] = useState(1);
   const [dueDate, setDueDate] = useState(null);
-  const [paymentValue, setPaymentValue] = useState(null);
+  const [paymentValue, setPaymentValue] = useState('');
+  console.log(paymentValue)
 
   const [selectedSalesman, setSelectedSalesman] = useState('');
   const [selectedBusiness, setselectedBusiness] = useState('');
@@ -36,6 +38,7 @@ function FormPayments({ toggle, onCreateSuccess }) {
       if (businessError) {
         console.log('FetchError: ', businessError.message);
       } else {
+        businessData.sort((a, b) => a.name.localeCompare(b.name));
         setBusiness(businessData || []);
         setselectedBusiness(businessData[0].id);
       }
@@ -101,12 +104,19 @@ function FormPayments({ toggle, onCreateSuccess }) {
             type="number"
           />
 
-          <Input
+{/*           <Input
             id="value"
             label="Valor de repasse"
             value={paymentValue}
             onChange={(e) => setPaymentValue(e.target.value)}
             type="number"
+          /> */}
+
+          <RealInput
+            id="value"
+            label="Valor de repasse"
+            value={paymentValue}
+            setPaymentValue={setPaymentValue}
           />
 
           <Input

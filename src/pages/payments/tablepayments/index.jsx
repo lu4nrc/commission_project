@@ -35,6 +35,9 @@ function TablePayments({ data }) {
               Valor
             </th>
             <th className=" text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Data de Venc.
+            </th>
+            <th className=" text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
               Data de Pag.
             </th>
             <th className=" text-left text-xs font-medium text-gray-500 uppercase tracking-wider">

@@ -1,10 +1,10 @@
 import React from 'react';
 import './style.css';
-function Toggle() {
+function Toggle({onClick, isCheck}) {
   return (
     <>
 <label className="switch">
-  <input type="checkbox"/>
+  <input type="checkbox" onClick={onClick} checked={isCheck}/>
   <span className="slider"></span>
 </label>
     </>

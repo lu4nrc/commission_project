@@ -30,7 +30,7 @@ function Main() {
           style={{ height: '100vh' }}
           collapsed={collapsed}
         >
-          <h1 className="font-bold py-5 dark:text-white">PipeFly</h1>
+          <h1 className="font-bold text-3xl py-5 dark:text-white">HellowCRM</h1>
           <Menu>
             <MenuItem
               icon={<Gauge size={32} color={theme === 'light' ? 'black' : 'white'} />}
