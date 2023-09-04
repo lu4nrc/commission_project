@@ -40,9 +40,9 @@ export default function Card({ card, index, updateCards }) {
         >
           <div className="flex justify-between h-8  px-1 pt-2">
             {card.temperature && <span className={tempStyle}>{card.temperature}</span>}
-            <span className="  bg-slate-100 right-auto leading-tight px-2 rounded-full rounded-tr-lg border border-slate-300">
+           {card.category ?  <span className="  bg-slate-100 right-auto leading-tight px-2 rounded-full rounded-tr-lg border border-slate-300">
               {card.category}
-            </span>
+            </span>: <span/>}
           </div>
           <div className="flex  p-1 ">
             <div className=" min-h-[80px] flex flex-col gap-1 p-2 w-full">

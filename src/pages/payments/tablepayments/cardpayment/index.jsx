@@ -1,6 +1,7 @@
 import { DotsThreeVertical } from '@phosphor-icons/react';
 import dayjs from 'dayjs';
 import React, { useState } from 'react';
+import Toggle from '../../../../components/toggle';
 
 function CardPayment({ item }) {
   const [paymentStatus, setPaymentStatus] = useState(item.payment_status);
@@ -51,7 +52,7 @@ function CardPayment({ item }) {
       </td>
       <td className="border-y-[1px] bg-white border-slate-300 border-r-[1px] rounded-br-xl rounded-tr-xl">
         <div className="flex">
-          <input type="checkbox" />
+          <Toggle/>
           <DotsThreeVertical color="gray" size={32} />
         </div>
       </td>
