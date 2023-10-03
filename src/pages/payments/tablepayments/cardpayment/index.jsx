@@ -64,7 +64,7 @@ function CardPayment({ item }) {
         {itemData.payment_date ? (
           <span className="font-semibold">{dayjs(itemData.payment_date).format('DD/MM/YYYY')}</span>
         ) : (
-          <span>   -   </span>
+          <span>    -     </span>
         )}
       </td>
       <td className="border-y-[1px] bg-white border-slate-300 ">

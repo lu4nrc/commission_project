@@ -1,193 +1,105 @@
-import React, { useEffect, useState } from 'react';
-import { DragDropContext } from 'react-beautiful-dnd';
-import {
-  dbUpdateColumnItems,
-  dbUpdateColumnName,
-  dbaAddColumn,
-  supabase,
-} from '../../services/supabase';
-import Loader from '../../utils/loader';
-import Column from './Column';
-import CreateColumn from './CreateColumn';
-
-async function onDragEnd(result, columns, setColumns) {
-  if (!result.destination) return;
-  const { source, destination } = result;
-
-  if (source.droppableId !== destination.droppableId) {
-    const sourceColumn = columns[source.droppableId];
-    const destColumn = columns[destination.droppableId];
-    const sourceItems = [...sourceColumn.items];
-    const destItems = [...destColumn.items];
-    const [removed] = sourceItems.splice(source.index, 1);
-    destItems.splice(destination.index, 0, removed);
-    setColumns({
-      ...columns,
-      [source.droppableId]: {
-        ...sourceColumn,
-        items: sourceItems,
-      },
-      [destination.droppableId]: {
-        ...destColumn,
-        items: destItems,
-      },
-    });
-    await dbUpdateColumnItems(sourceColumn.id, sourceItems);
-    await dbUpdateColumnItems(destColumn.id, destItems);
-  } else {
-    const column = columns[source.droppableId];
-    const copiedItems = [...column.items];
-    const [removed] = copiedItems.splice(source.index, 1);
-    copiedItems.splice(destination.index, 0, removed);
-    setColumns({
-      ...columns,
-      [source.droppableId]: {
-        ...column,
-        items: copiedItems,
-      },
-    });
-    await dbUpdateColumnItems(column.id, copiedItems);
-  }
-}
+import React from 'react';
+import { v4 as uuidv4 } from 'uuid';
+import Canva from './Canva';
+import { supabase } from '../../services/supabase';
+import { useState } from 'react';
+import { NavLink } from 'react-router-dom';
+import Button from '../../components/button';
+import Input from '../../components/input';
+import { useEffect } from 'react';
 
 function Kanban() {
-  const [columnData, setColumnData] = useState({});
-
-  const [fetchError, setFetchError] = useState();
-  const [Loading, setLoading] = useState(false);
-
-  const fetchColumnData = async () => {
-    setLoading(true);
-    const { data, error } = await supabase.from('columns').select('*');
-
-    if (error) {
-      setFetchError('Não foi possível buscar');
-      setColumnData([]);
-    } else {
-      const sortedColumnData = [...data].sort(
-        (a, b) => new Date(a.created_at) - new Date(b.created_at)
-      );
-
-      const updateData = await updateArray(sortedColumnData);
-
-      setColumnData(updateData || []);
-      setFetchError('');
-    }
-    setLoading(false);
-  };
-
-  const updateColumnData = async (column, type) => {
-    setLoading(true);
-    let newColumnData;
-    switch (type) {
-      case 'create':
-        try {
-          newColumnData = [...columnData, column];
-          setColumnData(newColumnData);
-          await dbaAddColumn(column);
-        } catch (error) {
-          setFetchError(error);
-        }
-        break;
-      case 'update_name':
-        try {
-          await dbUpdateColumnName(column);
-          newColumnData = columnData.map((oldColumn) =>
-            oldColumn.id === column.id ? column : oldColumn
-          );
-          setColumnData(newColumnData);
-        } catch (error) {
-          setFetchError(error);
-        }
-        break;
-      default:
-        break;
-    }
-    setLoading(false);
-  };
-
-  async function updateItems(column) {
-    setLoading(true)
-  
-    try {
-      await dbUpdateColumnItems(column.id, column.items);
-      setColumnData((prevColumnData) => {
-        const updatedColumnData = { ...prevColumnData };
-    
-        // Iterar pelas chaves do objeto
-        Object.keys(updatedColumnData).forEach((columnId) => {
-          const oldColumn = updatedColumnData[columnId];
-          if (oldColumn.id === column.id) {
-            // Atualizar o objeto com base na chave
-            updatedColumnData[columnId] = column;
-          }
-        });
-    
-        return updatedColumnData;
-      });
-    } catch (error) {
-      setFetchError(error);
-    }
-    setLoading(false)
-  }
+  const [name, setName] = useState('');
+  const [dataCanva, setDataCanva] = useState([]);
+  const [formError, setFormError] = useState('');
 
   useEffect(() => {
-    fetchColumnData();
+    /* Buscar por todos os itens no db CANVA */
+    const fetchData = async () => {
+      const { data: salesmanData, error: salesmanError } = await supabase.from('canva').select('*');
+
+      if (salesmanError) {
+        console.log('FetchError: ', salesmanError.message);
+      } else {
+        setDataCanva(salesmanData || []);
+      }
+    };
+
+    fetchData();
   }, []);
 
-  //ChatGPT
-  const fetchBusinessesBatch = async (cardIds) => {
-    const { data: businessesData, error: businessesError } = await supabase
-      .from('business')
-      .select('*')
-      .in('id', cardIds);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const id = uuidv4();
+    console.log(id);
 
-    if (businessesError) {
-      console.log('FetchError: ', businessesError.message);
-      return [];
-    } else {
-      return businessesData;
+    if (!name) {
+      setFormError('Preencha todos os campos corretamente.');
+      return;
     }
+
+    const { data, error } = await supabase.from('canva').insert([{ id, name }]).select();
+
+    if (error) {
+      console.log('Create Error:', error);
+      setFormError('Preencha todos os campos corretamente.', error.message);
+    }
+
+    if (data) {
+      console.log('Create, Data:', data);
+      setName('');
+      setFormError('');
+    }
+
+    await supabase.from('columns').insert([
+      {
+        id: uuidv4(),
+        canva_id: id,
+        name: 'Primeira coluna',
+        isadd: true,
+        items: [],
+      },
+    ]);
   };
 
-  //ChatGPT
-  async function updateArray(array) {
-    const cardIds = array.reduce((ids, column) => {
-      column.items.forEach((card) => ids.add(card.id));
-      return ids;
-    }, new Set());
-
-    const businessData = await fetchBusinessesBatch(Array.from(cardIds));
-
-    const updatedArray = array.map((column) => ({
-      ...column,
-      items: column.items.map((card) => {
-        const updatedCard = businessData.find((business) => business.id === card.id);
-        return updatedCard || card;
-      }),
-    }));
-
-    return updatedArray;
-  }
-
   return (
-    <div className="w-full">
-      <div className="flex w-[calc(100vw-200px)] overflow-x-auto">
-        <Loader disabled={Loading} />
-        <DragDropContext onDragEnd={(result) => onDragEnd(result, columnData, setColumnData)}>
-          {Object.entries(columnData).map(([columnId, column], index) => (
-            <Column
-            updateItems = {updateItems}
-              columnId={columnId}
-              column={column}
-              key={index}
-              updateColumnData={updateColumnData}
-            />
-          ))}
-          <div className="m-2">
-            <CreateColumn updateColumnData={updateColumnData} />
+    <div className="flex p-2 gap-2 flex-col ">
+      <div className=' flex justify-between'>
+      <h1 className="text-3xl font-semibold mb-4">Quadros</h1>
+        <form className="flex  gap-3 items-center" onSubmit={handleSubmit} action="">
+          <Input  id="name" onChange={(e) => setName(e.target.value)} value={name} />
+
+          <div className="flex gap-2 justify-end">
+            <Button label="Adicionar novo" type="submit" />
           </div>
-        </DragDropContext>
+          {formError && <p className="text-sm text-red-400">{formError}</p>}
+        </form>
+      </div>
+
+      <div className="shadow overflow-hidden sm:rounded-lg">
+        <table className="min-w-full divide-y dark:divide-gray-400">
+          <thead className="bg-gray-50 dark:bg-slate-700">
+            <tr>
+              <th className="px-6 py-3 text-left text-xs font-medium dark:text-white text-gray-500 uppercase tracking-wider">
+                Nome
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium dark:text-white text-gray-500 uppercase tracking-wider">
+                Editar
+              </th>
+            </tr>
+          </thead>
+          <tbody className="bg-white divide-y dark:divide-gray-500 dark:bg-slate-800">
+            {dataCanva &&
+              dataCanva.map((el) => (
+                <tr key={el.id}>
+                  <td className="px-6 py-4 dark:text-slate-200">
+                    <NavLink to={`canva/${el.id}`}>{el.name}</NavLink>
+                  </td>
+                  <td className="px-6 py-4 dark:text-slate-200">Editar</td>
+                </tr>
+              ))}
+          </tbody>
+        </table>
       </div>
     </div>
   );

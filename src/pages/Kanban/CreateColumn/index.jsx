@@ -3,7 +3,7 @@ import Modal from '../../../components/modal';
 import useModal from '../../../hooks/useModal';
 import ColumnForm from './ColumnForm';
 
-export default function CreateColumn({ updateColumnData }) {
+export default function CreateColumn({ updateColumnData, canva_id }) {
   const { isOpen, toggle } = useModal();
   return (
     <>
@@ -15,7 +15,7 @@ export default function CreateColumn({ updateColumnData }) {
         Adicionar Coluna
       </button>
       <Modal isOpen={isOpen} toggle={toggle}>
-        <ColumnForm toggle={toggle} updateColumnData={updateColumnData} />
+        <ColumnForm toggle={toggle} updateColumnData={updateColumnData} canva_id={canva_id} />
       </Modal>
     </>
   );

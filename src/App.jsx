@@ -8,6 +8,7 @@ import Error from './pages/error';
 import Login from './pages/login';
 import Payments from './pages/payments';
 import Salesman from './pages/salesman';
+import Canva from './pages/Kanban/Canva';
 
 function App() {
   const router = createBrowserRouter([
@@ -46,6 +47,10 @@ function App() {
         {
           path: 'kanban',
           element: <Kanban />,
+        },
+        {
+          path: 'kanban/canva/:canva_id',
+          element: <Canva />,
         },
       ],
     },

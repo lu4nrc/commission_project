@@ -35,6 +35,7 @@ const dbaAddColumn = async (column) => {
     await supabase.from('columns').insert([
       {
         id: column.id,
+        canva_id: column.canva_id,
         name: column.name,
         isadd: column.isadd,
         items: [],

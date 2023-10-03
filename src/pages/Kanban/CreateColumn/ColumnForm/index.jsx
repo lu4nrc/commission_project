@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import Input from '../../../../components/input';
-import { v4 as uuidv4 } from 'uuid'
+import { v4 as uuidv4 } from 'uuid';
 import Button from '../../../../components/button';
 
-function ColumnForm({ toggle, updateColumnData }) {
+function ColumnForm({ toggle, updateColumnData, canva_id }) {
   const [name, setName] = useState('');
   const [formError, setFormError] = useState('');
   const handleSubmit = async (e) => {
@@ -14,7 +14,10 @@ function ColumnForm({ toggle, updateColumnData }) {
       return;
     }
     try {
-      await updateColumnData({id: uuidv4(),  name: name, isadd: false, items: [] }, 'create');
+      await updateColumnData(
+        { id: uuidv4(), canva_id: canva_id, name: name, isadd: false, items: [] },
+        'create'
+      );
       toggle();
     } catch (error) {
       console.log('Create Error:', error);
@@ -25,8 +28,9 @@ function ColumnForm({ toggle, updateColumnData }) {
   return (
     <div>
       <h1 className="text-3xl font-semibold mb-4">Cadastro</h1>
-      <form className="flex w-full flex-col gap-3" onSubmit={handleSubmit} action="">
+      <form className="flex w-full flex-col gap-3" onSubmit={handleSubmit} >
         <Input
+        w="w-full"
           label="Nome da coluna"
           id="name"
           onChange={(e) => setName(e.target.value)}

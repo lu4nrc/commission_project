@@ -8,7 +8,7 @@ const Button = ({ onClick, label, type = 'button' }) => {
 
     <button
     type={type}
-      className="py-2 px-4 rounded cursor-pointer transition bg-[#b9925b] text-white"
+      className="py-2 px-4 max-h-14 rounded cursor-pointer transition bg-[#b9925b] text-white"
       onClick={onClick}
       >
       {label}
