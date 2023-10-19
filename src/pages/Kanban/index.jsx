@@ -7,13 +7,16 @@ import { NavLink } from 'react-router-dom';
 import Button from '../../components/button';
 import Input from '../../components/input';
 import { useEffect } from 'react';
+import Loader from '../../utils/loader';
 
 function Kanban() {
+  const [loading, setLoading] = useState(true);
   const [name, setName] = useState('');
   const [dataCanva, setDataCanva] = useState([]);
   const [formError, setFormError] = useState('');
 
   useEffect(() => {
+    setLoading(true)
     /* Buscar por todos os itens no db CANVA */
     const fetchData = async () => {
       const { data: salesmanData, error: salesmanError } = await supabase.from('canva').select('*');
@@ -25,13 +28,13 @@ function Kanban() {
       }
     };
 
+    setLoading(false)
     fetchData();
   }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const id = uuidv4();
-    console.log(id);
 
     if (!name) {
       setFormError('Preencha todos os campos corretamente.');
@@ -64,6 +67,7 @@ function Kanban() {
 
   return (
     <div className="flex p-2 gap-2 flex-col ">
+      <Loader disabled={loading}/>
       <div className=' flex justify-between'>
       <h1 className="text-3xl font-semibold mb-4">Quadros</h1>
         <form className="flex  gap-3 items-center" onSubmit={handleSubmit} action="">

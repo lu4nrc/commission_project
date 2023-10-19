@@ -71,7 +71,8 @@ function updateCardForm({ toggle, cardInfor, updateCards }) {
         <div className="flex flex-col">
           <strong>Contato: </strong>
           <p className="capitalize text-gray-500">
-            {cardInfor.contact.name} - Tel: {cardInfor.contact.number}
+            {cardInfor.contact.name} - Tel: {cardInfor.contact.phone}
+            {console.log(cardInfor)}
           </p>
         </div>
         <form className="flex w-full flex-col gap-3" onSubmit={handleSubmit} action="">
