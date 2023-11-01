@@ -1,5 +1,19 @@
 import { useEffect, useState } from 'react';
-
+import {
+  Box,
+  Button,
+  Modal,
+  Stack,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  TextField,
+  Typography,
+  useTheme,
+} from '@mui/material';
 import {
   dbDeleteBusiness,
   dbUpdateBusiness,
@@ -7,15 +21,30 @@ import {
   supabase,
 } from '../../services/supabase';
 import Loader from '../../utils/loader';
-import CreateBusiness from './createbusiness';
-import UpdateBusiness from './updatebusiness';
+import BusinessForm from './BusinessForm';
 
 function Business() {
-
   const [Loading, setLoading] = useState(false);
-
   const [businessData, setBusinessData] = useState([]);
+  const [business, setBusiness] = useState();
   const [fetchError, setFetchError] = useState('');
+  const [filter, setFilter] = useState('');
+  const [open, setOpen] = useState(false);
+
+  const handleOpen = () => {
+    setBusiness('');
+    setOpen(true);
+  };
+
+  const handleClose = () => setOpen(false);
+  const theme = useTheme();
+
+  const filteredRows = businessData.filter(
+    (row) =>
+      row.name.toLowerCase().includes(filter.toLowerCase()) ||
+      row.name.toLowerCase().includes(filter.toLowerCase()) ||
+      row.cnpj.toLowerCase().includes(filter.toLowerCase())
+  );
 
   const updateBusinessData = async (business, type) => {
     let newBusinessData;
@@ -79,49 +108,101 @@ function Business() {
     setLoading(false);
   };
 
+  function capitalizar(text) {
+    return text
+      .toLowerCase()
+      .split(' ')
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' ');
+  }
+
+  function handleEdit(business) {
+    setBusiness(business);
+    setOpen(true);
+  }
+
   return (
-    <div className="flex p-2 flex-col ">
+    <Stack p={1.5} sx={{ width: '100%', overflow: 'hidden' }}>
       <Loader disabled={Loading} />
-      <CreateBusiness
-        setBusinessData={setBusinessData}
-        businessData={businessData}
-        updateBusinessData={updateBusinessData}
-      />
-      <div className="shadow overflow-hidden sm:rounded-lg  w-full  h-[calc(100vh-115px)] overflow-y-auto column ">
-        <table className="min-w-full divide-y dark:divide-gray-400">
-          <thead className="bg-gray-50 dark:bg-slate-700">
-            <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium dark:text-white text-gray-500 uppercase tracking-wider">
-                Nome da empresa
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium dark:text-white text-gray-500 uppercase tracking-wider">
-                Cnpj
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium dark:text-white text-gray-500 uppercase tracking-wider">
-                Editar
-              </th>
-            </tr>
-          </thead>
-          <tbody className="bg-white divide-y dark:divide-gray-500 dark:bg-slate-800 h-[calc(100vh-115px)] overflow-y-auto">
-            {businessData &&
-              businessData.map((business) => (
-                <tr key={business.id}>
-                  <td className="px-6 py-4 dark:text-slate-200">
-                    <div className='flex flex-col font-medium '>
-                      {business.name}
-                      <span className='text-xs text-gray-500'>{business.contact.name}</span>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 dark:text-slate-200">{business.cnpj}</td>
-                  <td className="px-6 py-4 dark:text-slate-200">
-                    <UpdateBusiness business={business} updateBusinessData={updateBusinessData} />
-                  </td>
-                </tr>
-              ))}
-          </tbody>
-        </table>
-      </div>
-    </div>
+      <Modal open={open} onClose={handleClose}>
+        <BusinessForm
+          updateBusinessData={updateBusinessData}
+          business={business}
+          onClose={handleClose}
+        />
+      </Modal>
+      <Stack
+        bgcolor="#fff"
+        p={1.5}
+        borderRadius={2}
+        sx={{ height: 'calc(100vh - 25px)' }}
+        spacing={2}
+      >
+        <Typography variant="h4" fontWeight="medium">
+          Empresas
+        </Typography>
+        <Stack direction="row" justifyContent="space-between" spacing={2}>
+          <TextField
+            fullWidth
+            type="text"
+            size="small"
+            value={filter}
+            onChange={(e) => setFilter(e.target.value)}
+            placeholder="Filtrar por nome da empresa"
+          />
+          <Button fullWidth sx={{ maxWidth: 200 }} variant="contained" onClick={handleOpen}>
+            Criar Nova
+          </Button>
+        </Stack>
+
+        {/*  <DataGrid rows={filteredRows} columns={columns} pageSize={5} /> */}
+
+        <TableContainer /* sx={{ maxHeight: 'calc(100vh - 200px)' }} */>
+          <Table sx={{ minWidth: 650 }} stickyHeader>
+            <TableHead>
+              <TableRow>
+                <TableCell>Nome da empresa</TableCell>
+                <TableCell>Cnpj</TableCell>
+                <TableCell>Editar</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {filteredRows &&
+                filteredRows.map((business) => (
+                  <TableRow key={business.id}>
+                    <TableCell>
+                      <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                        <Typography variant="body1" fontWeight={'bold'}>
+                          {capitalizar(business.name)}
+                        </Typography>
+                        <Typography variant="body1" color={theme.palette.text.secondary}>
+                          {capitalizar(business.contact.name)}
+                        </Typography>
+                      </Box>
+                    </TableCell>
+                    <TableCell>
+                      <Typography variant="body1" color={theme.palette.text.secondary}>
+                        {business.cnpj}
+                      </Typography>
+                    </TableCell>
+                    <TableCell>
+                      <Button
+                        sx={{ maxWidth: 200 }}
+                        variant="outlined"
+                        onClick={() => handleEdit(business)}
+                      >
+                        Editar
+                      </Button>
+
+                      {/* <UpdateBusiness business={business} updateBusinessData={updateBusinessData} /> */}
+                    </TableCell>
+                  </TableRow>
+                ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </Stack>
+    </Stack>
   );
 }
 

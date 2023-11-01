@@ -9,7 +9,7 @@ export default function CreateCard({ updateCards }) {
 
   return (
     <>
-      <button className="bg-[#b9925b] rounded-md p-2" type="button" onClick={toggle}>
+      <button className="bg-[#b9925b] rounded-md p-1" type="button" onClick={toggle}>
         <Plus size={16} color="#fff" />
       </button>
       <Modal isOpen={isOpen} toggle={toggle}>

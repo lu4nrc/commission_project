@@ -77,9 +77,9 @@ function Main() {
         </Sidebar>
       )}
       <div className="flex flex-col w-full">
-        {user && (
+{/*         {user && (
           <nav className="bg-[#F8FAFC] dark:bg-slate-900 dark:text-white w-full h-[65px] flex justify-between items-center border-b-[1px] dark:border-zinc-600 px-3">
-            <div>{/* <ThemeSwitcher theme={theme} setTheme={setTheme} /> */}</div>
+            <div> <ThemeSwitcher theme={theme} setTheme={setTheme} /> </div>
             <div className="">
               <button
                 type="button"
@@ -92,7 +92,7 @@ function Main() {
               </button>
             </div>
           </nav>
-        )}
+        )} */}
         <div className="bg-[#F8FAFC] dark:bg-slate-900 w-full h-full">
           <Outlet />
         </div>
