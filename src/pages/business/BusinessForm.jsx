@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import {
   Box,
   Button,
+  Chip,
   FormControl,
   InputLabel,
   MenuItem,
@@ -11,15 +12,17 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import Business from '.';
+import { FileUploader } from 'react-drag-drop-files';
+import { supabase } from '../../services/supabase';
 
+const fileTypes = ['PDF', 'docx', 'doc', 'xlsx', 'xls'];
 const style = {
   position: 'absolute',
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
   width: 512,
-  background: '#fff',
+  bgcolor: '#fff',
   boxShadow: 24,
   p: 4,
   borderRadius: 2,
@@ -56,19 +59,68 @@ export const estados = [
   'SE',
   'TO',
 ];
+
 function BusinessForm({ open, onClose, updateBusinessData, business }) {
-  const [name, setName] = useState('');
-  const [cnpj, setCnpj] = useState('');
-  const [feeAmount, setFeeAmount] = useState(0);
-  const [contact, setContact] = useState({ name: '', phone: '' });
-  const [email, setEmail] = useState('');
-  const [city, setCity] = useState('');
-  const [invoicing, setInvoicing] = useState(0);
-  const [collaborators, setCollaborators] = useState(0);
-  const [category, setCategory] = useState('');
-  const [state, setState] = useState('');
-  const [regime, setRegime] = useState(regimeItems[0]);
-  const [formError, setFormError] = useState('');
+  const [filesPath, setFilesPath] = useState(business.files);
+  const [formData, setFormData] = useState({
+    name: '',
+    cnpj: '',
+    feeAmount: 0,
+    contact: { name: '', phone: '' },
+    email: '',
+    city: '',
+    invoicing: 0,
+    collaborators: 0,
+    category: '',
+    state: '',
+    files: [],
+    regime: regimeItems[0],
+    formError: '',
+  });
+
+  useEffect(() => {
+    if (business.id) {
+      setFormData(business);
+    }
+  }, [business]);
+
+  const {
+    name,
+    cnpj,
+    feeAmount,
+    contact,
+    email,
+    city,
+    invoicing,
+    collaborators,
+    category,
+    state,
+    files,
+    regime,
+    formError,
+  } = formData;
+
+  const setFormError = (error) => {
+    setFormData({ ...formData, formError: error });
+  };
+
+  const handleFileUpload = async (files) => {
+    const uploadedFilePaths = [];
+
+    for (const file of files) {
+      const folderName = `${business.id}`;
+      const fileName = `${file.name}`;
+      const filePath = `${folderName}/${fileName}`;
+      const { data, error } = await supabase.storage.from('businessfiles').upload(filePath, file);
+      if (data) {
+        uploadedFilePaths.push(data.path);
+      } else {
+        console.log(error);
+      }
+    }
+
+    return uploadedFilePaths;
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -77,7 +129,17 @@ function BusinessForm({ open, onClose, updateBusinessData, business }) {
       setFormError('Preencha todos os campos corretamente.');
       return;
     }
+
     try {
+      const filePaths = await handleFileUpload(files);
+
+      if (!filePaths) {
+        setFormError('Erro ao enviar o arquivo.');
+        return;
+      }
+
+      const fileData = filePaths.map((path) => ({ path }));
+
       await updateBusinessData(
         {
           name,
@@ -93,10 +155,11 @@ function BusinessForm({ open, onClose, updateBusinessData, business }) {
           invoicing,
           collaborators,
           temperature: 'FRIO',
+          files: fileData,
         },
         'create'
       );
-      onClose()
+      onClose();
     } catch (error) {
       console.log('Create Error:', error);
       setFormError('Preencha todos os campos corretamente.', error.message);
@@ -106,10 +169,23 @@ function BusinessForm({ open, onClose, updateBusinessData, business }) {
   const handleUpdate = async (e) => {
     e.preventDefault();
     if (!name) {
-      setFormError('Preencha todos os campos corretamente.');
+      setFormError('Todos os campos obrigatórios devem ser preenchidos.');
       return;
     }
+
     try {
+      const filePaths = await handleFileUpload(files);
+
+      if (!filePaths) {
+        setFormError('Erro ao enviar o arquivo.');
+        return;
+      }
+
+      const updatedFiles = [...filePaths];
+      const oldPaths = [...filesPath]; // Inicialize oldPaths como um array vazio
+
+      oldPaths.push(...updatedFiles);
+
       await updateBusinessData(
         {
           ...business,
@@ -124,40 +200,57 @@ function BusinessForm({ open, onClose, updateBusinessData, business }) {
           regime,
           invoicing,
           collaborators,
+          files: oldPaths, // Use oldPaths ao atualizar os arquivos
         },
         'update'
       );
-      onClose()
+      onClose();
     } catch (error) {
       console.log(error);
     }
   };
 
-  useEffect(() => {
-    if (business) {
-/* console.log(business) */
-      setName(business.name);
-      setCategory(business.category);
-      setCnpj(business.cnpj);
-      setRegime(business.regime);
-      setCollaborators(business.collaborators);
-      setCity(business.city);
-      setState(business.state);
-      setInvoicing(business.invoicing);
-      setFeeAmount(business.fee_amount);
-      setContact(business.contact);
-      setEmail(business.email);
-      setFormError(''); 
-    }
-  }, []);
+  const handleChipClick = (label) => {
+    if (label) {
+      const publicUrl = supabase.storage.from('businessfiles').getPublicUrl(label, 60);
 
-  const handleDelete = async (business) => {
-    await updateBusinessData(business, 'delete');
-    toggle();
+      window.open(publicUrl.data.publicUrl, '_blank');
+    }
+  };
+
+  const handleFileDelete = async (path) => {
+    try {
+      const { data, error } = await supabase.storage.from('businessfiles').remove(path);
+      if (data) {
+        const updatedFilesPath = filesPath.filter((file) => file !== path);
+        setFilesPath(updatedFilesPath);
+        const updatedBusinessFiles = formData.files.filter((file) => file !== path);
+
+        setFormData({ ...formData, files: updatedBusinessFiles });
+      } else {
+        console.error(error);
+      }
+    } catch (error) {
+      console.error('Error deleting file:', error);
+    }
+  };
+
+  const removeBeforeLastSlash = (str) => {
+    const lastIndex = str.lastIndexOf('/');
+    if (lastIndex !== -1) {
+      return str.substring(lastIndex + 1);
+    }
+    return str;
   };
 
   return (
-    <Box component="form" sx={style} noValidate autoComplete="off" onSubmit={business.id ? handleUpdate : handleSubmit}>
+    <Box
+      component="form"
+      sx={style}
+      noValidate
+      autoComplete="off"
+      onSubmit={business.id ? handleUpdate : handleSubmit}
+    >
       <Stack spacing={2}>
         <Typography variant="h5">Cadastrar empresa</Typography>
         <Box sx={{ display: 'flex', flexDirection: 'row', gap: 1 }}>
@@ -166,7 +259,7 @@ function BusinessForm({ open, onClose, updateBusinessData, business }) {
             label="Razão Social"
             id="name"
             size="small"
-            onChange={(e) => setName(e.target.value)}
+            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
             value={name}
           />
           <TextField
@@ -174,7 +267,7 @@ function BusinessForm({ open, onClose, updateBusinessData, business }) {
             label="Categoria"
             id="name"
             size="small"
-            onChange={(e) => setCategory(e.target.value)}
+            onChange={(e) => setFormData({ ...formData, category: e.target.value })}
             value={category}
           />
         </Box>
@@ -185,7 +278,7 @@ function BusinessForm({ open, onClose, updateBusinessData, business }) {
             id="cnpj"
             size="small"
             model="cnpj"
-            onChange={(e) => setCnpj(e.target.value)}
+            onChange={(e) => setFormData({ ...formData, cnpj: e.target.value })}
             value={cnpj}
           />
           <FormControl sx={{ flex: 2 }}>
@@ -193,7 +286,7 @@ function BusinessForm({ open, onClose, updateBusinessData, business }) {
             <Select
               value={regime}
               label="Regime tributário"
-              onChange={(e) => setRegime(e.target.value)}
+              onChange={(e) => setFormData({ ...formData, regime: e.target.value })}
               size="small"
             >
               {regimeItems.map((item, index) => (
@@ -211,7 +304,7 @@ function BusinessForm({ open, onClose, updateBusinessData, business }) {
             label="Cidade"
             id="city"
             size="small"
-            onChange={(e) => setCity(e.target.value)}
+            onChange={(e) => setFormData({ ...formData, city: e.target.value })}
             value={city}
           />
           <FormControl sx={{ flex: 3 }}>
@@ -219,7 +312,7 @@ function BusinessForm({ open, onClose, updateBusinessData, business }) {
             <Select
               value={state}
               label="Estados"
-              onChange={(e) => setState(e.target.value)}
+              onChange={(e) => setFormData({ ...formData, state: e.target.value })}
               size="small"
             >
               {estados.map((item, index) => (
@@ -235,19 +328,19 @@ function BusinessForm({ open, onClose, updateBusinessData, business }) {
             label="Faturamento"
             id="invoicing"
             size="small"
-            onChange={(e) => setInvoicing(e.target.value)}
+            onChange={(e) => setFormData({ ...formData, invoicing: e.target.value })}
           />
           <TextField
             label="Honorário"
             id="fee_amount"
             size="small"
-            onChange={(e) => setFeeAmount(e.target.value)}
+            onChange={(e) => setFormData({ ...formData, fee_amount: e.target.value })}
           />
           <TextField
             label="Qt. de Colaborador"
             id="collaborators"
             size="small"
-            onChange={(e) => setCollaborators(e.target.value)}
+            onChange={(e) => setFormData({ ...formData, collaborators: e.target.value })}
           />
         </Box>
         <Stack spacing={1}>
@@ -259,7 +352,9 @@ function BusinessForm({ open, onClose, updateBusinessData, business }) {
               label="Nome"
               id="contact_name"
               size="small"
-              onChange={(e) => setContact({ ...contact, name: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, contact: { ...contact, name: e.target.value } })
+              }
               value={contact.name}
             />
             <TextField
@@ -267,7 +362,9 @@ function BusinessForm({ open, onClose, updateBusinessData, business }) {
               id="phone"
               model="phone"
               size="small"
-              onChange={(e) => setContact({ ...contact, phone: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, contact: { ...contact, phone: e.target.value } })
+              }
               value={contact.phone}
             />
           </Box>
@@ -275,11 +372,42 @@ function BusinessForm({ open, onClose, updateBusinessData, business }) {
             label="Email"
             id="email"
             size="small"
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
             value={email}
           />
         </Stack>
-
+        <Stack direction={'row'} spacing={1} alignItems="center" flexWrap="wrap" maxWidth={400}>
+          <Typography variant="subtitle1" fontWeight="bold">
+            Arquivos anexados:
+          </Typography>
+          {filesPath.map((el, index) => (
+            <Chip
+              key={index}
+              label={removeBeforeLastSlash(el)}
+              onDelete={() => handleFileDelete(el)}
+              clickable
+              onClick={() => handleChipClick(el)}
+              sx={{
+                backgroundColor: '#f3f3f3',
+                color: '#333',
+                fontWeight: '600',
+                maxWidth: '100%',
+              }}
+            />
+          ))}
+        </Stack>
+        <FileUploader
+          maxSize={5}
+          label="Carregue ou solte arquivos aqui"
+          handleChange={(files) => setFormData({ ...formData, files: files })}
+          name="Files"
+          types={fileTypes}
+          multiple
+        >
+          {/*               <div>
+                <p>this is inside drop area</p>
+              </div> */}
+        </FileUploader>
         <Button variant="contained" type="submit">
           {business.id ? 'Atualizar' : 'Cadastrar'}
         </Button>

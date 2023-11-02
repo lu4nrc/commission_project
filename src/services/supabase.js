@@ -92,6 +92,7 @@ const dbUpdateBusiness = async (business) => {
         category: business.category,
         invoicing: business.invoicing,
         collaborators: business.collaborators,
+        files: business.files
       })
       .eq('id', business.id)
       .select();
