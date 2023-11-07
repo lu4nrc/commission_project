@@ -380,7 +380,7 @@ function BusinessForm({ open, onClose, updateBusinessData, business }) {
           <Typography variant="subtitle1" fontWeight="bold">
             Arquivos anexados:
           </Typography>
-          {filesPath.map((el, index) => (
+          {filesPath?.map((el, index) => (
             <Chip
               key={index}
               label={removeBeforeLastSlash(el)}
